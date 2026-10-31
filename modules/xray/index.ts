@@ -1,6 +1,7 @@
 import { addTemplate, defineNuxtModule } from '@nuxt/kit'
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
+import { locate } from './locate'
 
 type Snippet = {
   name: string
@@ -65,5 +66,9 @@ export default defineNuxtModule({
       getContents: () => `export default ${JSON.stringify(scan(nuxt.options.rootDir))}\n`
     })
     nuxt.options.alias['#xray-sources'] = template.dst
+
+    if (!nuxt.options.dev) return
+    const compilerOptions = (nuxt.options.vue.compilerOptions ||= {}) as { nodeTransforms?: unknown[] }
+    ;(compilerOptions.nodeTransforms ||= []).push(locate(nuxt.options.rootDir))
   }
 })

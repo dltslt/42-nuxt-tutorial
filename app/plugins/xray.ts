@@ -1,21 +1,16 @@
+import type { XrayElement } from '../composables/useXray'
+
 export default defineNuxtPlugin((nuxtApp) => {
-  // A directive is a marker on an element. v-xray="..." calls inspect on click.
+  // A directive is a marker on an element. v-xray="..." hangs the data lineage on it for the selector.
   nuxtApp.vueApp.directive('xray', {
-    mounted(el, binding) {
-      const onClick = () => useXray().inspect(binding.value)
-      el.addEventListener('click', onClick)
-      ;(el as HTMLElement & { _xrayClick?: () => void })._xrayClick = onClick
+    mounted(el: XrayElement, binding) {
+      el._xrayHit = binding.value
     },
-    updated(el, binding) {
-      const node = el as HTMLElement & { _xrayClick?: (event: Event) => void }
-      if (node._xrayClick) el.removeEventListener('click', node._xrayClick)
-      const onClick = () => useXray().inspect(binding.value)
-      el.addEventListener('click', onClick)
-      node._xrayClick = onClick
+    updated(el: XrayElement, binding) {
+      el._xrayHit = binding.value
     },
-    unmounted(el) {
-      const node = el as HTMLElement & { _xrayClick?: () => void }
-      if (node._xrayClick) el.removeEventListener('click', node._xrayClick)
+    getSSRProps() {
+      return {}
     }
   })
 })

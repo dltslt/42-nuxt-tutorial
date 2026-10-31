@@ -43,12 +43,44 @@
 }
 
 html.xray-on .xray-hit {
-  cursor: pointer;
   text-decoration: underline dotted;
   text-underline-offset: 0.2em;
+}
+
+html.xray-on main {
+  cursor: crosshair;
+}
+
+.xray-outline {
+  position: fixed;
+  z-index: 50;
+  pointer-events: none;
+  border: 2px dashed var(--layer-vue);
   border-radius: 0.25rem;
-  outline: 2px solid var(--layer-browser);
-  outline-offset: 2px;
+}
+
+.xray-outline-pinned {
+  border-style: solid;
+}
+
+.xray-label {
+  position: absolute;
+  bottom: 100%;
+  left: -2px;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem 0.25rem 0 0;
+  background: var(--layer-vue);
+  color: var(--ui-bg);
+  font: 600 0.6875rem/1.4 ui-monospace, monospace;
+  white-space: nowrap;
+}
+
+.xray-panel {
+  position: sticky;
+  top: 4.5rem;
+  align-self: start;
+  max-height: calc(100dvh - 6rem);
+  overflow: auto;
 }
 
 .layer-card {
@@ -66,6 +98,12 @@ html.xray-on .xray-hit {
   .syntax {
     forced-color-adjust: none;
   }
+}
+
+.syntax .line.focus {
+  display: inline-block;
+  width: 100%;
+  background: color-mix(in oklch, var(--layer-vue) 22%, transparent);
 }
 
 html.dark .shiki,
