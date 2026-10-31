@@ -1,15 +1,13 @@
 import { relative } from 'node:path'
 
-type Loc = { start: { line: number, column: number } }
+type Loc = { start: { line: number, column: number }, source: string }
 type Attr = { type: number, name: string, value?: { type: number, content: string, loc: Loc }, loc: Loc, nameLoc?: Loc }
-type Directive = { type: number, name: string, exp?: { content: string } }
-type ElementNode = { type: number, tagType: number, loc: Loc, props: Array<Attr | Directive> }
+type ElementNode = { type: number, tagType: number, loc: Loc, props: Attr[] }
 type Context = { filename: string }
 
 const NODE_ELEMENT = 1
 const TAG_ELEMENT = 0
 const PROP_ATTRIBUTE = 6
-const PROP_DIRECTIVE = 7
 
 function attribute(name: string, content: string, loc: Loc): Attr {
   return { type: PROP_ATTRIBUTE, name, nameLoc: loc, value: { type: 2, content, loc }, loc }
@@ -24,7 +22,8 @@ export function locate(rootDir: string) {
     if (!file.startsWith('app/')) return
     const { line, column } = node.loc.start
     node.props.push(attribute('data-xray-loc', `${file}:${line}:${column}`, node.loc))
-    const loop = node.props.find(prop => prop.type === PROP_DIRECTIVE && prop.name === 'for') as Directive | undefined
-    if (loop?.exp) node.props.push(attribute('data-xray-for', loop.exp.content, node.loc))
+    // Vue's own v-for transform has already removed the directive, so read it from the opening tag.
+    const loop = node.loc.source.match(/^<[^>]*?\sv-for="([^"]+)"/)
+    if (loop) node.props.push(attribute('data-xray-for', loop[1], node.loc))
   }
 }
