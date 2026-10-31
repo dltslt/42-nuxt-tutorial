@@ -23,15 +23,15 @@ export const tree: AnatomyNode[] = [
     id: 'makefile',
     name: 'Makefile',
     kind: 'source',
-    becomes: 'the dev server, and `.output/` after `make build`',
-    text: '`make dev` starts Nuxt on port 3042. `make build` writes the generated app into `.output/`. The file itself stays in the repository.'
+    becomes: 'the dev server, the tests, and `.output/` after `make build`',
+    text: '`make dev` starts Nuxt on port 3042. `make test` runs Vitest. `make build` writes the generated app into `.output/`. The file itself stays in the repository.'
   },
   {
     id: 'package',
     name: 'package.json',
     kind: 'source',
     becomes: '`node_modules/` and the scripts that start Nuxt',
-    text: '`pnpm install` reads `dependencies` and fetches those packages. `scripts.dev` is `nuxt dev`. Nuxt is one of those packages.'
+    text: '`pnpm install` reads `dependencies` and fetches those packages. `scripts.dev` is `nuxt dev`. `scripts.test` is `vitest run`, which is what `make test` calls. Nuxt is one of those packages.'
   },
   {
     id: 'config',
@@ -139,7 +139,14 @@ export const tree: AnatomyNode[] = [
             name: 'login.vue',
             kind: 'url',
             becomes: '`/login`',
-            text: 'The login chapter. The form posts to `/api/login`, and the page then calls `/api/me` so the trace can show the session cookie.'
+            text: 'The login chapter. The form posts to `/api/login`, and Ask who I am calls `/api/me` so the trace can show the session cookie.'
+          },
+          {
+            id: 'page-testing',
+            name: 'testing.vue',
+            kind: 'url',
+            becomes: '`/testing`',
+            text: 'The testing chapter. It shows `test/routes.test.ts` and `test/component.test.ts`, the files `make test` runs.'
           }
         ]
       },
@@ -281,6 +288,33 @@ export const tree: AnatomyNode[] = [
             text: 'This file is source, and it runs at build time. It scans the app for xray markers and emits a module the pages import. That emitted module is generated output.'
           }
         ]
+      }
+    ]
+  },
+  {
+    id: 'vitest',
+    name: 'vitest.config.ts',
+    kind: 'source',
+    becomes: 'the two Vitest projects',
+    text: '`make test` reads this file. One project runs `test/routes.test.ts` in Node. The other mounts a component in the Nuxt test environment.'
+  },
+  {
+    id: 'test',
+    name: 'test',
+    children: [
+      {
+        id: 'routes-test',
+        name: 'routes.test.ts',
+        kind: 'source',
+        becomes: 'checks against the HTTP routes',
+        text: 'Vitest runs this file in Node. `setup()` builds the app, and `$fetch` calls `/api/board`, `/api/me`, and `/api/login`.'
+      },
+      {
+        id: 'component-test',
+        name: 'component.test.ts',
+        kind: 'source',
+        becomes: 'a check of one component',
+        text: '`mountSuspended` renders `InlineText` inside Vitest. The check reads the `code` element the backtick span became.'
       }
     ]
   },
