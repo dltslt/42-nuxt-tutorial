@@ -25,6 +25,9 @@ const { data, error } = await useFetch('/api/board', {
       title="The board did not load"
       :description="error.message"
     />
-    <BoardTaskBoard v-else-if="data" class="mt-6" :board="data" />
+    <template v-else-if="data">
+      <BoardTaskBoard class="mt-6" :board="data" />
+      <XrayReplay />
+    </template>
   </div>
 </template>
