@@ -126,6 +126,13 @@ export const tree: AnatomyNode[] = [
             kind: 'url',
             becomes: '`/languages`',
             text: 'The languages chapter. It places TypeScript, the Vue file, CSS, and SQL in this app, and explains WebAssembly without shipping a `.wasm` file.'
+          },
+          {
+            id: 'page-modules',
+            name: 'modules.vue',
+            kind: 'url',
+            becomes: '`/modules`',
+            text: 'The modules chapter. It reads `#xray-sources`, the file `modules/xray/` wrote at build time, and it uses a `UButton` from `@nuxt/ui`.'
           }
         ]
       },

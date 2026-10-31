@@ -575,6 +575,16 @@ html.dark .shiki span {
   white-space: pre;
 }
 
+.marker-select {
+  max-inline-size: 20rem;
+  border: 1px solid var(--ui-border);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--ui-bg);
+  color: inherit;
+  font: inherit;
+}
+
 @container (width < 40rem) {
   .rows,
   .rows thead,
