@@ -35,17 +35,25 @@ const rules = [
   {
     id: 'ssr',
     name: 'SSR',
-    text: 'This is the default, and it is what this tutorial does. Each request runs the page on Node, and the response is HTML. `routeRules` needs no entry for that.'
+    text: 'No entry. Each request for `/rendering` runs the page on Node, and the response is HTML. This is the default, and it is what this tutorial does.',
+    sample: `// nuxt.config.ts
+// '/rendering' has no routeRules entry.`
   },
   {
     id: 'prerender',
     name: 'Prerender',
-    text: '`prerender: true` on a path tells `nuxt build` to write that HTML once. Later requests serve the file. A board that changes in SQLite would stay frozen at the build.'
+    text: '`nuxt build` writes the HTML for `/rendering` once. Later requests serve that file. A board that changes in SQLite stays frozen at the build.',
+    sample: `routeRules: {
+  '/rendering': { prerender: true }
+}`
   },
   {
     id: 'spa',
     name: 'SPA',
-    text: '`ssr: false` sends a shell. Vue builds the page in the browser after the script loads, so the first paint waits for that script.'
+    text: 'The response for `/rendering` is a shell. Vue builds the page in the browser after the script loads, so the first paint waits for that script.',
+    sample: `routeRules: {
+  '/rendering': { ssr: false }
+}`
   }
 ]
 
@@ -62,7 +70,7 @@ function go(next: number) {
   <section class="mt-8" aria-labelledby="render-steps-title">
     <h2 id="render-steps-title" class="text-lg font-semibold tracking-tight text-highlighted">From the response to the page</h2>
     <p class="mt-1 max-w-xl text-sm leading-relaxed text-pretty text-muted">
-      The sample page takes this path on a fresh load. Step through it.
+      The sample page follows these steps on a fresh load. Step through it.
     </p>
     <div class="mt-3 flex items-center gap-2">
       <button type="button" class="rounded-md px-3 py-2 text-sm ring ring-default" :disabled="step === 0" @click="go(step - 1)">
@@ -117,17 +125,23 @@ function go(next: number) {
   <section class="mt-10" aria-labelledby="render-rules-title">
     <h2 id="render-rules-title" class="text-lg font-semibold tracking-tight text-highlighted"><code class="token">routeRules</code></h2>
     <p class="mt-1 max-w-xl text-sm leading-relaxed text-pretty text-muted">
-      <InlineText text="`routeRules` in `nuxt.config.ts` chooses how a path is produced. Pick one." />
+      <InlineText text="A path is the URL of one page. `app/pages/rendering.vue` is `/rendering`. The file name already chose that URL. `routeRules` in `nuxt.config.ts` chooses how the HTML for that URL is made. Pick one." />
     </p>
-    <div class="mt-4 grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr))">
+    <div class="mt-4 grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr))" role="radiogroup" aria-labelledby="render-rules-title">
       <label v-for="item in rules" :key="item.id" class="pair-card">
         <input v-model="rule" type="radio" name="route-rule" :value="item.id">
         <span class="pair-names">
           <span>{{ item.name }}</span>
         </span>
-        <p><InlineText :text="item.text" /></p>
       </label>
     </div>
     <p class="sr-only" aria-live="polite">{{ chosen.name }}. {{ chosen.text.replaceAll('`', '') }}</p>
+    <article class="mt-4">
+      <h3 id="rule-sample" class="text-sm font-semibold text-highlighted">{{ chosen.name }}</h3>
+      <p class="mt-1 max-w-xl text-sm leading-relaxed text-pretty text-muted"><InlineText :text="chosen.text" /></p>
+      <div class="sample mt-2" tabindex="0" role="region" aria-labelledby="rule-sample">
+        <pre><code>{{ chosen.sample }}</code></pre>
+      </div>
+    </article>
   </section>
 </template>
