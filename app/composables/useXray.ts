@@ -39,9 +39,13 @@ export function useXray() {
     if (!el) hovered.value = null
   }
 
-  function showData(value: XrayHit) {
+  // A structure step can open the data chain of a row it was given; that also pins the element.
+  function showData(value: XrayHit | null) {
+    if (value && !pinned.value) pinned.value = hovered.value
     dataHit.value = value
   }
 
-  return { enabled, hovered, pinned, selected, hit, view, hover, pin, showData }
+  const followed = computed(() => dataHit.value !== null)
+
+  return { enabled, hovered, pinned, selected, hit, view, followed, hover, pin, showData }
 }

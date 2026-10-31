@@ -5,6 +5,7 @@ const props = defineProps<{ el: HTMLElement }>()
 const route = useRoute()
 const html = ref<Record<string, string>>({})
 const { $xrayFromServer } = useNuxtApp()
+const { showData } = useXray()
 
 const steps = computed(() => buildStructure(props.el, route, $xrayFromServer(props.el)))
 
@@ -53,6 +54,16 @@ watch(steps, async (list) => {
             <dd class="break-all font-mono text-xs">{{ show(value) }}</dd>
           </template>
         </dl>
+
+        <UButton
+          v-if="step.link"
+          class="mt-3"
+          size="sm"
+          variant="outline"
+          trailing-icon="i-lucide-arrow-right"
+          :label="`Follow “${step.link.words}” to its database row`"
+          @click="showData(step.link)"
+        />
 
         <p v-if="step.code" class="mt-3 break-words font-mono text-xs">{{ step.code }}</p>
 

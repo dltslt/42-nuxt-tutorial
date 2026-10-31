@@ -1,3 +1,4 @@
+import type { XrayHit } from '../composables/useXray'
 import { fileOf, instanceOf, isOurs, nameOf, type Instance } from './vueTree'
 
 export type Place = { file: string, line: number }
@@ -10,6 +11,27 @@ export type StructureStep = {
   place?: Place
   props?: Record<string, unknown>
   names?: string[]
+  link?: XrayHit
+}
+
+// Props that hold one row of the board, and the marked template line that prints the row's title.
+const rowProps: Record<string, { query: string, template: string }> = {
+  task: { query: 'tasks', template: 'task-title' }
+}
+
+function rowLink(props: Record<string, unknown>): XrayHit | undefined {
+  for (const [name, target] of Object.entries(rowProps)) {
+    const row = props[name] as { id?: string, title?: string } | undefined
+    if (!row?.id || !row.title) continue
+    return {
+      words: row.title,
+      rowId: row.id,
+      field: 'title',
+      query: target.query,
+      snippets: { template: target.template, fetch: 'board-fetch', handler: 'board-handler' }
+    }
+  }
+  return undefined
 }
 
 function placeOf(value: string | null): Place | undefined {
@@ -89,6 +111,7 @@ function componentStep(instance: Instance, usedAt: string | null): StructureStep
     title: `<${name}> from ${file}`,
     sentence: `A component is a reusable piece of template with its own inputs, called props, like a function's parameters. Nobody imports it: Nuxt finds ${file} and makes it available everywhere as <${name}>. The parent passed these props:`,
     props: { ...instance.props },
+    link: rowLink(instance.props),
     place: placeOf(usedAt) ?? { file, line: 1 }
   }
 }

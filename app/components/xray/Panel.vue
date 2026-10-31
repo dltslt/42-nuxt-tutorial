@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { selected, pinned, view, hit, pin } = useXray()
+const { selected, pinned, view, hit, followed, pin, showData } = useXray()
 
 const crumbs = computed(() => (selected.value ? crumbsFor(selected.value).reverse() : []))
 </script>
@@ -29,6 +29,16 @@ const crumbs = computed(() => (selected.value ? crumbsFor(selected.value).revers
         </button>
       </template>
     </nav>
+
+    <UButton
+      v-if="followed"
+      class="self-start"
+      size="sm"
+      variant="ghost"
+      leading-icon="i-lucide-arrow-left"
+      label="Back to the element"
+      @click="showData(null)"
+    />
 
     <p v-if="view === 'empty'" class="text-sm text-muted">Nothing selected yet.</p>
     <XrayDataView v-else-if="view === 'data'" />
