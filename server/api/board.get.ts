@@ -1,13 +1,12 @@
 // A file named board.get.ts becomes GET /api/board.
-export default defineEventHandler(async () => {
-  const db = useDatabase()
-
-  const columns = await db.sql`
+export default defineEventHandler(async (event) => {
+  // xray:board-handler
+  const columns = await query(event, 'columns')`
     SELECT id, title, state, position
     FROM columns
     ORDER BY position
   `
-  const tasks = await db.sql`
+  const tasks = await query(event, 'tasks')`
     SELECT
       tasks.id,
       tasks.title,
@@ -21,7 +20,7 @@ export default defineEventHandler(async () => {
     LEFT JOIN tasks AS parents ON parents.id = tasks.parent_id
     ORDER BY tasks.title
   `
-  const blockers = await db.sql`
+  const blockers = await query(event, 'blockers')`
     SELECT
       blockers.id,
       blockers.severity,
@@ -32,11 +31,14 @@ export default defineEventHandler(async () => {
     JOIN tasks AS blocked ON blocked.id = blockers.blocked_item_id
   `
 
-  return {
-    columns: (columns.rows ?? []).map(column => ({
+  const body = {
+    columns: columns.map(column => ({
       ...column,
-      tasks: (tasks.rows ?? []).filter(task => task.column_id === column.id)
+      tasks: tasks.filter(task => task.column_id === column.id)
     })),
-    blockers: blockers.rows ?? []
+    blockers
   }
+  if (event.context.trace) event.context.trace.body = body
+  return body
+  // /xray:board-handler
 })
