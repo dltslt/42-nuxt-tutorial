@@ -4,8 +4,9 @@ import { buildStructure, type StructureStep } from '../../utils/structure'
 const props = defineProps<{ el: HTMLElement }>()
 const route = useRoute()
 const html = ref<Record<string, string>>({})
+const { $xrayFromServer } = useNuxtApp()
 
-const steps = computed(() => buildStructure(props.el, route, null))
+const steps = computed(() => buildStructure(props.el, route, $xrayFromServer(props.el)))
 
 function key(step: StructureStep) {
   return step.place ? `${step.place.file}:${step.place.line}` : ''
