@@ -10,16 +10,38 @@ export type XrayHit = {
   }
 }
 
+export type XrayElement = HTMLElement & { _xrayHit?: XrayHit }
+
+// DOM elements cannot go into the SSR payload, so the selection lives in plain refs set only in the browser.
+const hovered = shallowRef<XrayElement | null>(null)
+const pinned = shallowRef<XrayElement | null>(null)
+const dataHit = shallowRef<XrayHit | null>(null)
+
 export function useXray() {
   const enabled = useState('xray-enabled', () => false)
-  const open = useState('xray-open', () => false)
-  const hit = useState<XrayHit | null>('xray-hit', () => null)
 
-  function inspect(value: XrayHit) {
-    if (!enabled.value) return
-    hit.value = value
-    open.value = true
+  const selected = computed(() => pinned.value ?? hovered.value)
+  const hit = computed(() => dataHit.value ?? selected.value?._xrayHit ?? null)
+  const view = computed<'data' | 'structure' | 'empty'>(() => {
+    if (hit.value) return 'data'
+    return selected.value ? 'structure' : 'empty'
+  })
+
+  function hover(el: XrayElement | null) {
+    if (pinned.value) return
+    dataHit.value = null
+    hovered.value = el
   }
 
-  return { enabled, open, hit, inspect }
+  function pin(el: XrayElement | null) {
+    dataHit.value = null
+    pinned.value = el
+    if (!el) hovered.value = null
+  }
+
+  function showData(value: XrayHit) {
+    dataHit.value = value
+  }
+
+  return { enabled, hovered, pinned, selected, hit, view, hover, pin, showData }
 }
