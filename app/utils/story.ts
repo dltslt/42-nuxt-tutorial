@@ -22,6 +22,7 @@ export type RequestTrace = {
   path: string
   queries: QueryTrace[]
   body: unknown
+  cookie?: { name: string, bytes: number } | null
 }
 
 export type StoryLayer = {
@@ -125,7 +126,9 @@ export function buildStory(hit: XrayHit, trace: RequestTrace, sources: Record<st
       layer: 'network',
       name: 'Network',
       title: `${trace.method} ${trace.path}`,
-      sentence: 'The browser and the server are two programs. This is the object the server sent for the thing you clicked. The marked field is that value.',
+      sentence: trace.cookie
+        ? `The browser and the server are two programs. This request carried \`${trace.cookie.name}\`, ${trace.cookie.bytes} bytes. The sealed value is not in the trace. The object below is what the server sent for the thing you clicked.`
+        : 'The browser and the server are two programs. This is the object the server sent for the thing you clicked. The marked field is that value.',
       record: findNamedRow(trace.body, hit.query, hit.rowId),
       focus: hit.field
     },

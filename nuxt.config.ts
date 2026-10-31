@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui', './modules/xray/index'],
+  modules: ['@nuxt/ui', 'nuxt-auth-utils', './modules/xray/index'],
   css: ['~/assets/css/main.css'],
   // Remote font hosts are not required. The page uses the browser's UI font.
   fonts: {

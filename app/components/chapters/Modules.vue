@@ -157,7 +157,7 @@ function go(next: number) {
         <p class="text-sm font-semibold">2. Name it in the config</p>
         <p class="text-sm leading-relaxed text-pretty"><InlineText text="Put the package name in the `modules` array in `nuxt.config.ts`, next to the ones already there." /></p>
         <div class="sample" tabindex="0" role="region" aria-label="The modules array">
-          <pre><code>modules: ['@nuxt/ui', './modules/xray/index', 'nuxt-auth-utils']</code></pre>
+          <pre><code>modules: ['@nuxt/ui', 'nuxt-auth-utils', './modules/xray/index']</code></pre>
         </div>
       </li>
       <li class="pair-card">

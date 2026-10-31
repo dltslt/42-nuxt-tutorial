@@ -585,6 +585,49 @@ html.dark .shiki span {
   font: inherit;
 }
 
+.login-form {
+  display: grid;
+  gap: 0.75rem;
+  max-inline-size: 22rem;
+}
+
+.login-field {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.login-field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.login-field input {
+  border: 1px solid var(--ui-border);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--ui-bg);
+  color: inherit;
+  font: inherit;
+}
+
+.login-field input:user-invalid {
+  border-color: var(--ui-error);
+  outline: 2px solid var(--ui-error);
+  outline-offset: 1px;
+}
+
+.field-error {
+  display: none;
+  margin: 0;
+  color: var(--ui-error);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.login-field input:user-invalid + .field-error {
+  display: block;
+}
+
 @container (width < 40rem) {
   .rows,
   .rows thead,

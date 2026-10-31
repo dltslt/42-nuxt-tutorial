@@ -133,6 +133,13 @@ export const tree: AnatomyNode[] = [
             kind: 'url',
             becomes: '`/modules`',
             text: 'The modules chapter. It reads `#xray-sources`, the file `modules/xray/` wrote at build time, and it uses a `UButton` from `@nuxt/ui`.'
+          },
+          {
+            id: 'page-login',
+            name: 'login.vue',
+            kind: 'url',
+            becomes: '`/login`',
+            text: 'The login chapter. The form posts to `/api/login`, and the page then calls `/api/me` so the trace can show the session cookie.'
           }
         ]
       },
@@ -186,6 +193,27 @@ export const tree: AnatomyNode[] = [
         name: 'api',
         open: true,
         children: [
+          {
+            id: 'login-post',
+            name: 'login.post.ts',
+            kind: 'endpoint',
+            becomes: '`POST /api/login`',
+            text: 'The login form posts an actor id and a password here. The handler checks `password_hash` and seals a session cookie. The hash is not part of the traced rows.'
+          },
+          {
+            id: 'logout-post',
+            name: 'logout.post.ts',
+            kind: 'endpoint',
+            becomes: '`POST /api/logout`',
+            text: 'Sign out calls this. The handler clears the session cookie.'
+          },
+          {
+            id: 'me-get',
+            name: 'me.get.ts',
+            kind: 'endpoint',
+            becomes: '`GET /api/me`',
+            text: '`requireUserSession` runs first. Without a cookie that opens, the handler answers 401. With one, it returns the id and the name from the session.'
+          },
           {
             id: 'tables-get',
             name: 'tables.get.ts',

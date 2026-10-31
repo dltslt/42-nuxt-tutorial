@@ -8,12 +8,34 @@ export type QueryTrace = {
   ms: number
 }
 
+export type SessionCookie = {
+  name: string
+  bytes: number
+}
+
 export type Trace = {
   id: string
   method: string
   path: string
   queries: QueryTrace[]
   body: unknown
+  cookie: SessionCookie | null
+}
+
+// nuxt-auth-utils seals the user into this cookie. The trace keeps the name and the length.
+const sessionCookieName = 'nuxt-auth-session'
+
+function sessionCookie(event: H3Event): SessionCookie | null {
+  const header = getRequestHeader(event, 'cookie')
+  if (!header) return null
+  for (const part of header.split(';')) {
+    const trimmed = part.trim()
+    const eq = trimmed.indexOf('=')
+    if (eq === -1) continue
+    if (trimmed.slice(0, eq) !== sessionCookieName) continue
+    return { name: sessionCookieName, bytes: trimmed.length - eq - 1 }
+  }
+  return null
 }
 
 const traces = new Map<string, Trace>()
@@ -24,7 +46,8 @@ export function beginTrace(event: H3Event) {
     method: event.method,
     path: event.path,
     queries: [],
-    body: null
+    body: null,
+    cookie: sessionCookie(event)
   }
   event.context.trace = trace
   traces.set(trace.id, trace)

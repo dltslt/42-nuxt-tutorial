@@ -4,8 +4,21 @@ export default defineNitroPlugin(async () => {
 
   await db.sql`CREATE TABLE IF NOT EXISTS actors (
     id TEXT PRIMARY KEY,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    password_hash TEXT
   )`
+  // A database created before this column existed keeps its old shape.
+  const info = await db.sql`PRAGMA table_info(actors)`
+  const columns = (info.rows ?? []).map(row => String(row.name))
+  if (!columns.includes('password_hash')) {
+    // Two requests can pass the check together on the first boot. The second alter is a no-op.
+    try {
+      await db.sql`ALTER TABLE actors ADD COLUMN password_hash TEXT`
+    } catch (cause) {
+      const message = cause instanceof Error ? cause.message : String(cause)
+      if (!message.includes('duplicate column name')) throw cause
+    }
+  }
   await db.sql`CREATE TABLE IF NOT EXISTS columns (
     id TEXT PRIMARY KEY,
     title TEXT NOT NULL,
@@ -30,10 +43,23 @@ export default defineNitroPlugin(async () => {
 
   const { rows } = await db.sql`SELECT COUNT(*) AS n FROM tasks`
   const count = Number(rows?.[0]?.n ?? 0)
-  if (count > 0) return
+  if (count === 0) {
+    await db.sql`INSERT INTO actors (id, name) VALUES ('ada', 'Ada')`
+    await db.sql`INSERT INTO actors (id, name) VALUES ('lin', 'Lin')`
+  }
 
-  await db.sql`INSERT INTO actors (id, name) VALUES ('ada', 'Ada')`
-  await db.sql`INSERT INTO actors (id, name) VALUES ('lin', 'Lin')`
+  // The chapter prints these passwords. The table stores a hash, and only when one is missing.
+  const passwords: Record<string, string> = { ada: 'bread', lin: 'knife' }
+  const stored = await db.sql`SELECT id, password_hash FROM actors`
+  for (const row of stored.rows ?? []) {
+    const id = String(row.id)
+    const plain = passwords[id]
+    if (!plain || row.password_hash) continue
+    const hash = await hashPassword(plain)
+    await db.sql`UPDATE actors SET password_hash = ${hash} WHERE id = ${id}`
+  }
+
+  if (count > 0) return
 
   await db.sql`INSERT INTO columns (id, title, state, position) VALUES ('col_backlog', 'backlog', 'unstarted', 1)`
   await db.sql`INSERT INTO columns (id, title, state, position) VALUES ('col_progress', 'in progress', 'started', 2)`
