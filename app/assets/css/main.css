@@ -1,34 +1,121 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+/* Kanagawa, from rebelot/kanagawa.nvim: lotus in light, wave in dark. */
+@theme static {
+  --color-kanagawa-50: #c7d7e0;
+  --color-kanagawa-100: #b5cbd2;
+  --color-kanagawa-200: #9fb5c9;
+  --color-kanagawa-300: #7fb4ca;
+  --color-kanagawa-400: #7e9cd8;
+  --color-kanagawa-500: #4d699b;
+  --color-kanagawa-600: #5d57a3;
+  --color-kanagawa-700: #4d699b;
+  --color-kanagawa-800: #2d4f67;
+  --color-kanagawa-900: #223249;
+  --color-kanagawa-950: #1f1f28;
+}
+
 :root {
   color-scheme: light dark;
   font-family: system-ui, sans-serif;
-  --layer-browser: oklch(40% 0.09 250);
-  --layer-vue: oklch(38% 0.09 155);
-  --layer-network: oklch(40% 0.09 75);
-  --layer-server: oklch(40% 0.1 300);
-  --layer-database: oklch(40% 0.1 25);
-  --layer-browser-bg: oklch(96% 0.02 250);
-  --layer-vue-bg: oklch(96% 0.02 155);
-  --layer-network-bg: oklch(96% 0.03 75);
-  --layer-server-bg: oklch(96% 0.02 300);
-  --layer-database-bg: oklch(96% 0.02 25);
-  --layer-ink: oklch(22% 0.02 250);
+  --accent-light: #4d699b;
+  --accent-dark: #7e9cd8;
+  accent-color: var(--accent-light);
+
+  /* lotus */
+  --ui-bg: #f2ecbc;
+  --ui-bg-muted: #e5ddb0;
+  --ui-bg-elevated: #e7dba0;
+  --ui-bg-accented: #d5cea3;
+  --ui-bg-inverted: #43436c;
+  --ui-text: #545464;
+  --ui-text-highlighted: #43436c;
+  --ui-text-toned: #545464;
+  --ui-text-muted: #6b6962;
+  --ui-text-dimmed: #6b6962;
+  --ui-text-inverted: #f2ecbc;
+  --ui-border: #84806e;
+  --ui-border-muted: #84806e;
+  --ui-border-accented: #716e61;
+  --ui-border-inverted: #43436c;
+  --ui-primary: #4d699b;
+
+  --layer-browser: #4d699b;
+  --layer-vue: #596d46;
+  --layer-network: #77713f;
+  --layer-server: #624c83;
+  --layer-database: #c84053;
+  --layer-browser-bg: color-mix(in oklab, var(--layer-browser) 16%, var(--ui-bg));
+  --layer-vue-bg: color-mix(in oklab, #6f894e 16%, var(--ui-bg));
+  --layer-network-bg: color-mix(in oklab, var(--layer-network) 16%, var(--ui-bg));
+  --layer-server-bg: color-mix(in oklab, var(--layer-server) 14%, var(--ui-bg));
+  --layer-database-bg: color-mix(in oklab, var(--layer-database) 14%, var(--ui-bg));
+  --layer-ink: var(--ui-text);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    accent-color: var(--accent-dark);
+  }
+}
+
+html.light {
+  color-scheme: light;
+  accent-color: var(--accent-light);
+}
+
+html.dark {
+  color-scheme: dark;
+  accent-color: var(--accent-dark);
+}
+
+@supports (color: light-dark(white, black)) {
+  html:not(.light):not(.dark) {
+    accent-color: light-dark(var(--accent-light), var(--accent-dark));
+  }
+}
+
+::selection {
+  background: #b5cbd2;
+  color: #43436c;
 }
 
 .dark {
-  --layer-browser: oklch(82% 0.08 250);
-  --layer-vue: oklch(84% 0.08 155);
-  --layer-network: oklch(84% 0.08 75);
-  --layer-server: oklch(82% 0.08 300);
-  --layer-database: oklch(82% 0.08 25);
-  --layer-browser-bg: oklch(28% 0.03 250);
-  --layer-vue-bg: oklch(28% 0.03 155);
-  --layer-network-bg: oklch(28% 0.03 75);
-  --layer-server-bg: oklch(28% 0.04 300);
-  --layer-database-bg: oklch(28% 0.03 25);
-  --layer-ink: oklch(96% 0.01 250);
+  /* wave */
+  --ui-bg: #1f1f28;
+  --ui-bg-muted: #2a2a37;
+  --ui-bg-elevated: #363646;
+  --ui-bg-accented: #363646;
+  --ui-bg-inverted: #dcd7ba;
+  --ui-text: #c8c093;
+  --ui-text-highlighted: #dcd7ba;
+  --ui-text-toned: #c8c093;
+  --ui-text-muted: #9cabca;
+  --ui-text-dimmed: #938aa9;
+  --ui-text-inverted: #1f1f28;
+  --ui-border: #727169;
+  --ui-border-muted: #727169;
+  --ui-border-accented: #938aa9;
+  --ui-border-inverted: #dcd7ba;
+  --ui-primary: #7e9cd8;
+
+  --layer-browser: #7e9cd8;
+  --layer-vue: #98bb6c;
+  --layer-network: #e6c384;
+  --layer-server: #957fb8;
+  --layer-database: #ffa066;
+  --layer-browser-bg: color-mix(in oklab, var(--layer-browser) 18%, var(--ui-bg));
+  --layer-vue-bg: color-mix(in oklab, var(--layer-vue) 18%, var(--ui-bg));
+  --layer-network-bg: color-mix(in oklab, var(--layer-network) 18%, var(--ui-bg));
+  --layer-server-bg: color-mix(in oklab, var(--layer-server) 18%, var(--ui-bg));
+  --layer-database-bg: color-mix(in oklab, var(--layer-database) 18%, var(--ui-bg));
+  --layer-ink: var(--ui-text);
+}
+
+html.dark ::selection {
+  background: #2d4f67;
+  color: #dcd7ba;
 }
 
 .xray-hit {
