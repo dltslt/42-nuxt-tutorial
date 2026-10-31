@@ -7,7 +7,7 @@ make setup
 make dev
 ```
 
-Open http://localhost:3042. The app opens on Welcome. The board to click is Sample content. Turn on X-ray and point at a title.
+Open http://localhost:3042. The app opens on Welcome, then the chapters A web app for a C programmer and Project anatomy. The board to click is Sample content. Turn on X-ray and point at a title.
 
 `make reset-db` deletes `.data/tutorial.sqlite`. The next start creates it again.
 
