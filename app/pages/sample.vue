@@ -39,5 +39,9 @@ const { data, error } = await useFetch('/api/board', {
       <XrayReplay />
       <XrayJourney />
     </template>
+    <p class="mt-8 text-sm text-pretty text-muted">
+      Continue with
+      <NuxtLink to="/rendering" class="font-medium text-highlighted underline decoration-1 underline-offset-2">Rendering</NuxtLink>.
+    </p>
   </div>
 </template>

@@ -97,8 +97,14 @@ export const tree: AnatomyNode[] = [
             name: 'sample.vue',
             kind: 'url',
             becomes: '`/sample`',
-            open: true,
             text: 'The board lives at `/sample`. The page calls `useFetch` on `/api/board` while Nuxt is building the HTML.'
+          },
+          {
+            id: 'page-rendering',
+            name: 'rendering.vue',
+            kind: 'url',
+            becomes: '`/rendering`',
+            text: 'The rendering chapter. Node renders it to HTML, and the page shows the time that render wrote.'
           }
         ]
       },
