@@ -9,7 +9,7 @@
     </p>
     <p class="mt-6 text-sm text-pretty text-muted">
       Continue with
-      <NuxtLink to="/sample" class="font-medium text-highlighted underline decoration-1 underline-offset-2">Sample content</NuxtLink>.
+      <NuxtLink to="/from-c" class="font-medium text-highlighted underline decoration-1 underline-offset-2">A web app for a C programmer</NuxtLink>.
     </p>
   </div>
 </template>
