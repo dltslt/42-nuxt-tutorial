@@ -147,6 +147,13 @@ export const tree: AnatomyNode[] = [
             kind: 'url',
             becomes: '`/testing`',
             text: 'The testing chapter. It shows `test/routes.test.ts` and `test/component.test.ts`, the files `make test` runs.'
+          },
+          {
+            id: 'page-deploy',
+            name: 'deploy.vue',
+            kind: 'url',
+            becomes: '`/deploy`',
+            text: 'The build chapter. It reads `.output/` when that folder exists, and it explains the other shapes a Nuxt app can take. Docker is one of those explanations.'
           }
         ]
       },
@@ -220,6 +227,13 @@ export const tree: AnatomyNode[] = [
             kind: 'endpoint',
             becomes: '`GET /api/me`',
             text: '`requireUserSession` runs first. Without a cookie that opens, the handler answers 401. With one, it returns the id and the name from the session.'
+          },
+          {
+            id: 'output-get',
+            name: 'output.get.ts',
+            kind: 'endpoint',
+            becomes: '`GET /api/output`',
+            text: 'The build chapter calls this. The handler lists names inside `.output/` when `make build` has written that folder, and it does not open the files.'
           },
           {
             id: 'tables-get',
