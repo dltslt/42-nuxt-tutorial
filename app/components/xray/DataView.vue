@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import sources from '#xray-sources'
-import { buildStory, langFor, type BoardTrace, type Snippet, type StoryLayer } from '../../utils/story'
+import { buildStory, langFor, type RequestTrace, type Snippet, type StoryLayer } from '../../utils/story'
 
 const { hit } = useXray()
-const traceId = useState<string | null>('board-trace', () => null)
-const trace = ref<BoardTrace | null>(null)
+const trace = ref<RequestTrace | null>(null)
 const missing = ref(false)
 const html = ref<Record<string, string>>({})
 
 const story = computed(() => {
-  if (!hit.value || !trace.value) return [] as StoryLayer[]
+  if (!hit.value || !trace.value || trace.value.id !== hit.value.traceId) return [] as StoryLayer[]
   return buildStory(hit.value, trace.value, sources as Record<string, Snippet>)
 })
 
-watch(traceId, async (id) => {
+watch(() => hit.value?.traceId ?? '', async (id) => {
   if (!id) return
+  if (trace.value?.id === id) return
   missing.value = false
   try {
-    trace.value = await $fetch<BoardTrace>(`/api/_xray/${id}`)
+    trace.value = await $fetch<RequestTrace>(`/api/_xray/${id}`)
   } catch {
     trace.value = null
     missing.value = true

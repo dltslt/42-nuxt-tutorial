@@ -14,12 +14,12 @@ export type StructureStep = {
   link?: XrayHit
 }
 
-// Props that hold one row of the board, and the marked template line that prints the row's title.
-const rowProps: Record<string, { query: string, template: string }> = {
-  task: { query: 'tasks', template: 'task-title' }
+// Props that hold one row, the marked template line that prints its title, and the request that loaded it.
+const rowProps: Record<string, { query: string, template: string, fetch: string, handler: string }> = {
+  task: { query: 'tasks', template: 'task-title', fetch: 'board-fetch', handler: 'board-handler' }
 }
 
-function rowLink(props: Record<string, unknown>): XrayHit | undefined {
+function rowLink(props: Record<string, unknown>, traces: Record<string, string>): XrayHit | undefined {
   for (const [name, target] of Object.entries(rowProps)) {
     const row = props[name] as { id?: string, title?: string } | undefined
     if (!row?.id || !row.title) continue
@@ -28,7 +28,8 @@ function rowLink(props: Record<string, unknown>): XrayHit | undefined {
       rowId: row.id,
       field: 'title',
       query: target.query,
-      snippets: { template: target.template, fetch: 'board-fetch', handler: 'board-handler' }
+      traceId: traces[target.fetch] ?? '',
+      snippets: { template: target.template, fetch: target.fetch, handler: target.handler }
     }
   }
   return undefined
@@ -79,7 +80,7 @@ function loopStep(loop: Element): StructureStep {
   }
 }
 
-function componentStep(instance: Instance, usedAt: string | null): StructureStep {
+function componentStep(instance: Instance, usedAt: string | null, traces: Record<string, string>): StructureStep {
   const file = fileOf(instance)
   if (file === 'app/app.vue') {
     return {
@@ -111,7 +112,7 @@ function componentStep(instance: Instance, usedAt: string | null): StructureStep
     title: `<${name}> from ${file}`,
     sentence: `A component is a reusable piece of template with its own inputs, called props, like a function's parameters. Nobody imports it: Nuxt finds ${file} and makes it available everywhere as <${name}>. The parent passed these props:`,
     props: { ...instance.props },
-    link: rowLink(instance.props),
+    link: rowLink(instance.props, traces),
     place: placeOf(usedAt) ?? { file, line: 1 }
   }
 }
@@ -129,7 +130,7 @@ function libraryStep(instances: Instance[], el: Element): StructureStep {
   }
 }
 
-export function buildStructure(el: Element, route: { path: string }, fromServer: boolean | null): StructureStep[] {
+export function buildStructure(el: Element, route: { path: string }, fromServer: boolean | null, traces: Record<string, string>): StructureStep[] {
   const steps: StructureStep[] = []
   const chain = chainOf(el)
   const page = chain.find(instance => fileOf(instance).startsWith('app/pages/'))
@@ -151,7 +152,7 @@ export function buildStructure(el: Element, route: { path: string }, fromServer:
     // Wrappers like NuxtLayout and RouterView sit between our files; they are plumbing, not the lesson.
     library = []
     const root = instance.subTree.el as Element | null
-    steps.push(componentStep(instance, root instanceof Element ? root.getAttribute('data-xray-use') : null))
+    steps.push(componentStep(instance, root instanceof Element ? root.getAttribute('data-xray-use') : null, traces))
     for (const loop of loopsInside(el, instance)) steps.push(loopStep(loop))
   }
   if (library.length) steps.push(libraryStep(library, el))

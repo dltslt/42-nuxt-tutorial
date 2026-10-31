@@ -16,20 +16,12 @@ export type QueryTrace = {
   ms: number
 }
 
-export type BoardTrace = {
+export type RequestTrace = {
   id: string
   method: string
   path: string
   queries: QueryTrace[]
-  body: {
-    columns?: Array<{
-      id: string
-      title: string
-      state: string
-      tasks?: Record<string, unknown>[]
-    }>
-    blockers?: Record<string, unknown>[]
-  } | null
+  body: unknown
 }
 
 export type StoryLayer = {
@@ -47,27 +39,45 @@ export type StoryLayer = {
   row?: Record<string, unknown> | null
 }
 
-function focusRecord(trace: BoardTrace, hit: XrayHit) {
-  const body = trace.body
-  if (!body) return null
-  if (hit.query === 'columns') {
-    const column = body.columns?.find(item => item.id === hit.rowId)
-    if (!column) return null
-    return { id: column.id, title: column.title, state: column.state }
+function isScalar(value: unknown) {
+  return value === null || typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+}
+
+function scalars(record: Record<string, unknown>) {
+  const kept: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(record)) {
+    if (isScalar(value)) kept[key] = value
   }
-  if (hit.query === 'tasks') {
-    for (const column of body.columns ?? []) {
-      const task = column.tasks?.find(item => item.id === hit.rowId)
-      if (task) return task
+  return kept
+}
+
+// The table name is a property somewhere in the JSON. Tasks sit inside each column, not at the top.
+function findNamedRow(node: unknown, table: string, rowId: string): Record<string, unknown> | null {
+  if (!node || typeof node !== 'object') return null
+  if (Array.isArray(node)) {
+    for (const item of node) {
+      const found = findNamedRow(item, table, rowId)
+      if (found) return found
+    }
+    return null
+  }
+  const record = node as Record<string, unknown>
+  const list = record[table]
+  if (Array.isArray(list)) {
+    for (const item of list) {
+      if (!item || typeof item !== 'object' || Array.isArray(item)) continue
+      const row = item as Record<string, unknown>
+      if (String(row.id) === rowId) return scalars(row)
     }
   }
-  if (hit.query === 'blockers') {
-    return body.blockers?.find(item => item.id === hit.rowId) ?? null
+  for (const value of Object.values(record)) {
+    const found = findNamedRow(value, table, rowId)
+    if (found) return found
   }
   return null
 }
 
-export function buildStory(hit: XrayHit, trace: BoardTrace, sources: Record<string, Snippet>): StoryLayer[] {
+export function buildStory(hit: XrayHit, trace: RequestTrace, sources: Record<string, Snippet>): StoryLayer[] {
   const query = trace.queries.find(item => item.name === hit.query)
   const row = query?.rows.find(item => String(item.id) === hit.rowId) ?? null
   return [
@@ -97,7 +107,7 @@ export function buildStory(hit: XrayHit, trace: BoardTrace, sources: Record<stri
       name: 'Network',
       title: `${trace.method} ${trace.path}`,
       sentence: 'The browser and the server are two programs. This is the object the server sent for the thing you clicked. The marked field is that value.',
-      record: focusRecord(trace, hit),
+      record: findNamedRow(trace.body, hit.query, hit.rowId),
       focus: hit.field
     },
     {

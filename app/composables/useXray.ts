@@ -3,11 +3,22 @@ export type XrayHit = {
   rowId: string
   field: string
   query: string
+  traceId: string
   snippets: {
     template: string
     fetch: string
     handler: string
   }
+}
+
+// One id per fetch marker. Call this from setup, then write the id when that response arrives.
+export function useTraceIds() {
+  return useState<Record<string, string>>('xray-trace-ids', () => ({}))
+}
+
+export function rememberTrace(ids: Record<string, string>, marker: string, id: string | null) {
+  if (!id || ids[marker] === id) return ids
+  return { ...ids, [marker]: id }
 }
 
 export type XrayElement = HTMLElement & { _xrayHit?: XrayHit }

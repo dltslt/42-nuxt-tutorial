@@ -10,6 +10,7 @@ const props = defineProps<{
 }>()
 
 const { enabled } = useXray()
+const traces = useTraceIds()
 
 function hit(words: string, field: string) {
   return {
@@ -17,6 +18,7 @@ function hit(words: string, field: string) {
     rowId: props.task.id,
     field,
     query: 'tasks',
+    traceId: traces.value['board-fetch'] ?? '',
     snippets: { template: `task-${field}`, fetch: 'board-fetch', handler: 'board-handler' }
   }
 }

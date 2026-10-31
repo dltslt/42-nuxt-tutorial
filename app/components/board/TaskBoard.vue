@@ -23,6 +23,7 @@ defineProps<{
 }>()
 
 const { enabled } = useXray()
+const traces = useTraceIds()
 
 function columnHit(column: { id: string, title: string }) {
   return {
@@ -30,6 +31,7 @@ function columnHit(column: { id: string, title: string }) {
     rowId: column.id,
     field: 'title',
     query: 'columns',
+    traceId: traces.value['board-fetch'] ?? '',
     snippets: { template: 'column-title', fetch: 'board-fetch', handler: 'board-handler' }
   }
 }
@@ -40,6 +42,7 @@ function blockerHit(blocker: { id: string, blocker_title: string, blocked_title:
     rowId: blocker.id,
     field,
     query: 'blockers',
+    traceId: traces.value['board-fetch'] ?? '',
     snippets: { template: `blocker-${field}`, fetch: 'board-fetch', handler: 'board-handler' }
   }
 }

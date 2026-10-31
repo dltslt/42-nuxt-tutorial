@@ -1,11 +1,11 @@
 <script setup lang="ts">
-const traceId = useState<string | null>('board-trace', () => null)
+const traces = useTraceIds()
 
 // xray:board-fetch
 // useFetch asks GET /api/board while the server builds the HTML, then the browser reuses that result.
 const { data, error } = await useFetch('/api/board', {
   onResponse({ response }) {
-    traceId.value = response.headers.get('x-trace-id')
+    traces.value = rememberTrace(traces.value, 'board-fetch', response.headers.get('x-trace-id'))
   }
 })
 // /xray:board-fetch

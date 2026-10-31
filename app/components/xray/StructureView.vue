@@ -7,7 +7,8 @@ const html = ref<Record<string, string>>({})
 const { $xrayFromServer } = useNuxtApp()
 const { showData } = useXray()
 
-const steps = computed(() => buildStructure(props.el, route, $xrayFromServer(props.el)))
+const traces = useTraceIds()
+const steps = computed(() => buildStructure(props.el, route, $xrayFromServer(props.el), traces.value))
 
 function key(step: StructureStep) {
   return step.place ? `${step.place.file}:${step.place.line}` : ''
