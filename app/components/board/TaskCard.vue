@@ -31,8 +31,8 @@ function hit(words: string, field: string) {
       </button>
     </h3>
     <!-- /xray:task-title -->
-    <p class="mt-1 text-xs text-muted">
-      {{ task.level }}
+    <p class="mt-1 flex items-center gap-1 text-xs text-muted">
+      <UBadge :label="task.level" color="neutral" variant="subtle" size="sm" />
       <template v-if="task.lead">
         ·
         <!-- xray:task-lead -->
