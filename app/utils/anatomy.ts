@@ -53,6 +53,27 @@ export const tree: AnatomyNode[] = [
         text: 'This is the component at the top of the page. It renders the layout, and the layout renders whichever page matches the URL.'
       },
       {
+        id: 'app-config',
+        name: 'app.config.ts',
+        kind: 'source',
+        becomes: 'the Nuxt UI colors',
+        text: '`defineAppConfig` sets the primary and neutral colors. `@nuxt/ui` reads them when it paints `UButton` and the rest of the shell.'
+      },
+      {
+        id: 'auth-dts',
+        name: 'auth.d.ts',
+        kind: 'source',
+        becomes: 'the type of the session user',
+        text: 'This augments `#auth-utils`. The session user is an `id` and a `name`, which is what `GET /api/me` returns.'
+      },
+      {
+        id: 'xray-sources-dts',
+        name: 'xray-sources.d.ts',
+        kind: 'source',
+        becomes: 'the type of `#xray-sources`',
+        text: 'The modules chapter imports `#xray-sources`. This file tells TypeScript the virtual module is a record of snippets. `modules/xray/index.ts` writes that record at build time.'
+      },
+      {
         id: 'layouts',
         name: 'layouts',
         open: true,
@@ -162,15 +183,97 @@ export const tree: AnatomyNode[] = [
         name: 'components',
         children: [
           {
+            id: 'inline-text',
+            name: 'InlineText.vue',
+            kind: 'component',
+            becomes: 'the backtick spans in a sentence',
+            text: 'Chapter sentences pass through this component. A span wrapped in backticks becomes a `code` element. `test/component.test.ts` mounts this file.'
+          },
+          {
             id: 'board',
             name: 'board',
             children: [
+              {
+                id: 'task-board',
+                name: 'TaskBoard.vue',
+                kind: 'component',
+                becomes: 'the columns on `/sample`',
+                text: '`sample.vue` places this on the page. It reads the board and renders one `TaskCard` for each task.'
+              },
+              {
+                id: 'task-form',
+                name: 'TaskForm.vue',
+                kind: 'component',
+                becomes: 'the form that posts a new task',
+                text: 'The sample page places this under the board. Submitting it calls `POST /api/tasks`.'
+              },
               {
                 id: 'task-card',
                 name: 'TaskCard.vue',
                 kind: 'component',
                 becomes: 'a component inside the board',
-                text: '`sample.vue` places one of these on the board for each task. The template name is `BoardTaskCard`, from the folder plus the file name.'
+                text: '`TaskBoard` places one of these for each task. The template name is `BoardTaskCard`, from the folder plus the file name.'
+              }
+            ]
+          },
+          {
+            id: 'chapters',
+            name: 'chapters',
+            children: [
+              {
+                id: 'anatomy-branch',
+                name: 'AnatomyBranch.vue',
+                kind: 'component',
+                becomes: 'the body of this chapter page',
+                text: 'A file in `pages/` is the URL. This component is what `/anatomy` draws, and the other files in this folder do the same for their page. The nodes come from `app/utils/anatomy.ts`.'
+              }
+            ]
+          },
+          {
+            id: 'xray-components',
+            name: 'xray',
+            children: [
+              {
+                id: 'xray-panel',
+                name: 'Panel.vue',
+                kind: 'component',
+                becomes: 'the drawer beside the page',
+                text: 'The layout mounts this beside the page when x-ray is on. It reads `useXray` and shows `StructureView` or `DataView`.'
+              },
+              {
+                id: 'xray-selector',
+                name: 'Selector.vue',
+                kind: 'component',
+                becomes: 'hover and pin',
+                text: 'The layout mounts this with the drawer. Hovering an element selects it. A click pins it, and Esc clears the pin.'
+              },
+              {
+                id: 'xray-structure',
+                name: 'StructureView.vue',
+                kind: 'component',
+                becomes: 'which file drew the element',
+                text: 'Given the selected element, this walks the Vue instance tree and names the component and the template line.'
+              },
+              {
+                id: 'xray-data',
+                name: 'DataView.vue',
+                kind: 'component',
+                becomes: 'which query produced the words',
+                text: 'This follows a marked value from the template, through the fetch, to the SQL on the trace.'
+              },
+              {
+                id: 'xray-journey',
+                name: 'Journey.vue',
+                kind: 'component',
+                becomes: 'the first load against a later click',
+                text: '`sample.vue` places this under the board. It reads the trace from the first `GET /api/board` and the trace from the last create or move.'
+              },
+              {
+                id: 'xray-replay',
+                name: 'Replay.vue',
+                kind: 'component',
+                becomes: 'the create and move steps',
+                text: '`sample.vue` places this under the board. After a create or a move, it walks that request one layer at a time.'
               }
             ]
           }
@@ -192,6 +295,80 @@ export const tree: AnatomyNode[] = [
                 text: '`nuxt.config.ts` points `css` at this file. The layer colors and the board columns are defined here, and the components pick them up by class.'
               }
             ]
+          }
+        ]
+      },
+      {
+        id: 'composables',
+        name: 'composables',
+        children: [
+          {
+            id: 'use-xray',
+            name: 'useXray.ts',
+            kind: 'source',
+            becomes: '`useXray` and the trace state, with no import line',
+            text: 'A file in `composables/` is available in every component. `useXray` holds the hovered element. `useTraceIds` holds one trace id per fetch marker.'
+          }
+        ]
+      },
+      {
+        id: 'plugins',
+        name: 'plugins',
+        children: [
+          {
+            id: 'plugin-xray',
+            name: 'xray.ts',
+            kind: 'source',
+            becomes: 'the `v-xray` directive',
+            text: 'Nuxt runs a file in `plugins/` when the app starts. This one registers `v-xray`, which hangs the data lineage on an element for the selector.'
+          },
+          {
+            id: 'plugin-xray-ssr',
+            name: 'xray-ssr.client.ts',
+            kind: 'source',
+            becomes: 'which elements came from the server HTML',
+            text: 'The `.client` suffix means this plugin runs in the browser only. It records the elements already in the document before Vue mounts, so the structure view can tell a server render from a later update.'
+          }
+        ]
+      },
+      {
+        id: 'utils',
+        name: 'utils',
+        children: [
+          {
+            id: 'util-anatomy',
+            name: 'anatomy.ts',
+            kind: 'source',
+            becomes: 'this tree',
+            text: 'The anatomy page imports `tree` from here. Exports in `utils/` are also available to components without an import line.'
+          },
+          {
+            id: 'util-board',
+            name: 'board.ts',
+            kind: 'source',
+            becomes: 'the board types and `placeTask`',
+            text: '`TaskBoard` and `TaskForm` share `Board` from here. `placeTask` moves a task into the column named by `column_id`.'
+          },
+          {
+            id: 'util-story',
+            name: 'story.ts',
+            kind: 'source',
+            becomes: 'the layers in the data view',
+            text: '`buildStory` turns a trace and the marked snippets into the layers `DataView` and `Replay` render.'
+          },
+          {
+            id: 'util-structure',
+            name: 'structure.ts',
+            kind: 'source',
+            becomes: 'the steps in the structure view',
+            text: '`buildStructure` turns the selected element into the steps `StructureView` renders: the route, the layout, the page, the component, and the element.'
+          },
+          {
+            id: 'util-vue-tree',
+            name: 'vueTree.ts',
+            kind: 'source',
+            becomes: 'the component name and file for an element',
+            text: 'These helpers read the Vue instance attached to an element in the dev build, and return the component name and the file under `app/`.'
           }
         ]
       }
@@ -268,6 +445,33 @@ export const tree: AnatomyNode[] = [
                 text: 'Brackets in a file name are a parameter. `[id]` is the task id in the path. Moving a card sends `PATCH /api/tasks/` and that id.'
               }
             ]
+          },
+          {
+            id: 'xray-api',
+            name: '_xray',
+            children: [
+              {
+                id: 'xray-id-get',
+                name: '[id].get.ts',
+                kind: 'endpoint',
+                becomes: '`GET /api/_xray/:id`',
+                text: 'The drawer and the sample page call this with a trace id. The handler returns that trace, or 404 when the id is unknown.'
+              },
+              {
+                id: 'xray-source-get',
+                name: 'source.get.ts',
+                kind: 'endpoint',
+                becomes: '`GET /api/_xray/source`',
+                text: 'The structure view calls this with a file and a line. The handler reads that `.vue` file under `app/` and returns the element around that line.'
+              },
+              {
+                id: 'xray-highlight-post',
+                name: 'highlight.post.ts',
+                kind: 'endpoint',
+                becomes: '`POST /api/_xray/highlight`',
+                text: 'The drawer posts snippets here. The handler returns highlighted HTML and writes nothing.'
+              }
+            ]
           }
         ]
       },
@@ -281,6 +485,53 @@ export const tree: AnatomyNode[] = [
             kind: 'source',
             becomes: 'the tables and the Dinner rows',
             text: 'Nitro runs this file once, when the server process starts. It creates the tables and, on an empty database, the Dinner tasks. The API handlers then read those rows.'
+          }
+        ]
+      },
+      {
+        id: 'middleware',
+        name: 'middleware',
+        children: [
+          {
+            id: 'trace-middleware',
+            name: 'trace.ts',
+            kind: 'source',
+            becomes: 'a step before every `/api/` handler',
+            text: 'Nitro runs a file in `middleware/` before the route handler. This one starts a trace and sets `x-trace-id`, and it skips `/api/_xray`.'
+          }
+        ]
+      },
+      {
+        id: 'server-utils',
+        name: 'utils',
+        children: [
+          {
+            id: 'util-sql',
+            name: 'sql.ts',
+            kind: 'source',
+            becomes: '`query`',
+            text: 'A file in `server/utils/` is available to every handler without an import line. `query` runs the SQL and keeps a copy on the request trace.'
+          },
+          {
+            id: 'util-task',
+            name: 'task.ts',
+            kind: 'source',
+            becomes: '`readTask`',
+            text: 'The create and move handlers call this to load one task in the same shape the board prints.'
+          },
+          {
+            id: 'util-trace',
+            name: 'trace.ts',
+            kind: 'source',
+            becomes: '`beginTrace` and `readTrace`',
+            text: '`server/middleware/trace.ts` calls `beginTrace`. `GET /api/_xray/:id` calls `readTrace`.'
+          },
+          {
+            id: 'util-highlight',
+            name: 'highlight.ts',
+            kind: 'source',
+            becomes: 'highlighted source for the drawer',
+            text: '`POST /api/_xray/highlight` and `GET /api/_xray/source` call this to turn a snippet into HTML.'
           }
         ]
       }
@@ -300,6 +551,13 @@ export const tree: AnatomyNode[] = [
             kind: 'generated',
             becomes: 'a virtual module of the xray markers',
             text: 'This file is source, and it runs at build time. It scans the app for xray markers and emits a module the pages import. That emitted module is generated output.'
+          },
+          {
+            id: 'xray-locate',
+            name: 'locate.ts',
+            kind: 'source',
+            becomes: 'the line stamp on each template node',
+            text: '`index.ts` calls `locate` while Vue compiles a template. The transform writes the file and the line onto elements under `app/`, so the browser can point back at the source.'
           }
         ]
       }
