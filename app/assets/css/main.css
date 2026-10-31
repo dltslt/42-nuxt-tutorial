@@ -87,6 +87,47 @@ html.dark {
   background: #d7e3d8;
 }
 
+/* A few words in the chapter intros. The path words use the same colors as the layers. */
+.term {
+  font-weight: 600;
+  color: var(--ui-primary);
+}
+
+.term-browser,
+.term-vue,
+.term-network,
+.term-server,
+.term-database {
+  border-radius: 0.2rem;
+  padding-inline: 0.28em;
+  font-weight: 600;
+}
+
+.term-browser {
+  color: var(--layer-browser);
+  background: var(--layer-browser-bg);
+}
+
+.term-vue {
+  color: var(--layer-vue);
+  background: var(--layer-vue-bg);
+}
+
+.term-network {
+  color: var(--layer-network);
+  background: var(--layer-network-bg);
+}
+
+.term-server {
+  color: var(--layer-server);
+  background: var(--layer-server-bg);
+}
+
+.term-database {
+  color: var(--layer-database);
+  background: var(--layer-database-bg);
+}
+
 .board-column:nth-child(1) {
   background: #c7d7e0;
 }
