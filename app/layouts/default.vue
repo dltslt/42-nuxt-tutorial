@@ -1,5 +1,11 @@
 <script setup lang="ts">
-const xray = useState('xray-enabled', () => false)
+const { enabled } = useXray()
+
+watch(enabled, (on) => {
+  if (!import.meta.client) return
+  document.documentElement.classList.toggle('xray-on', on)
+  if (!on) useXray().open.value = false
+}, { immediate: true })
 </script>
 
 <template>
@@ -11,7 +17,7 @@ const xray = useState('xray-enabled', () => false)
           <p class="truncate text-xs text-muted">From a row in the database to a word on the screen.</p>
         </div>
         <div class="ms-auto flex items-center gap-3">
-          <USwitch v-model="xray" label="X-ray" />
+          <USwitch v-model="enabled" label="X-ray" />
           <UColorModeButton />
         </div>
       </div>
@@ -26,5 +32,6 @@ const xray = useState('xray-enabled', () => false)
         <slot />
       </main>
     </div>
+    <XrayDrawer />
   </div>
 </template>

@@ -21,6 +21,28 @@ defineProps<{
     }>
   }
 }>()
+
+const { enabled } = useXray()
+
+function columnHit(column: { id: string, title: string }) {
+  return {
+    words: column.title,
+    rowId: column.id,
+    field: 'title',
+    query: 'columns',
+    snippets: { template: 'column-title', fetch: 'board-fetch', handler: 'board-handler' }
+  }
+}
+
+function blockerHit(blocker: { id: string, blocker_title: string, blocked_title: string, severity: string }, field: 'blocker_title' | 'blocked_title' | 'severity') {
+  return {
+    words: blocker[field],
+    rowId: blocker.id,
+    field,
+    query: 'blockers',
+    snippets: { template: `blocker-${field}`, fetch: 'board-fetch', handler: 'board-handler' }
+  }
+}
 </script>
 
 <template>
@@ -32,7 +54,13 @@ defineProps<{
         class="flex min-h-64 flex-col rounded-xl bg-elevated/60 p-3 ring ring-default"
       >
         <header>
-          <h2 class="text-sm font-semibold text-highlighted">{{ column.title }}</h2>
+          <!-- xray:column-title -->
+          <h2 class="text-sm font-semibold text-highlighted">
+            <button type="button" class="xray-hit" :aria-disabled="enabled ? undefined : true" v-xray="columnHit(column)">
+              {{ column.title }}
+            </button>
+          </h2>
+          <!-- /xray:column-title -->
           <p class="text-xs text-muted">{{ column.state }}</p>
         </header>
         <ul v-if="column.tasks.length" class="mt-3 flex flex-col gap-2">
@@ -48,10 +76,23 @@ defineProps<{
       <h2 class="text-sm font-semibold text-highlighted">Blockers</h2>
       <ul class="mt-2 flex flex-col gap-1">
         <li v-for="blocker in board.blockers" :key="blocker.id" class="text-sm">
-          <span class="font-medium">{{ blocker.blocker_title }}</span>
+          <!-- xray:blocker-blocker_title -->
+          <button type="button" class="xray-hit font-medium" :aria-disabled="enabled ? undefined : true" v-xray="blockerHit(blocker, 'blocker_title')">
+            {{ blocker.blocker_title }}
+          </button>
+          <!-- /xray:blocker-blocker_title -->
           blocks
-          <span class="font-medium">{{ blocker.blocked_title }}</span>
-          <span class="text-muted">· {{ blocker.severity }}</span>
+          <!-- xray:blocker-blocked_title -->
+          <button type="button" class="xray-hit font-medium" :aria-disabled="enabled ? undefined : true" v-xray="blockerHit(blocker, 'blocked_title')">
+            {{ blocker.blocked_title }}
+          </button>
+          <!-- /xray:blocker-blocked_title -->
+          ·
+          <!-- xray:blocker-severity -->
+          <button type="button" class="xray-hit text-muted" :aria-disabled="enabled ? undefined : true" v-xray="blockerHit(blocker, 'severity')">
+            {{ blocker.severity }}
+          </button>
+          <!-- /xray:blocker-severity -->
         </li>
       </ul>
     </section>

@@ -7,7 +7,7 @@ make setup
 make dev
 ```
 
-Open http://localhost:3042.
+Open http://localhost:3042. Turn on X-ray and click a title.
 
 `make reset-db` deletes `.data/tutorial.sqlite`. The next start creates it again.
 

@@ -3,6 +3,7 @@
 
 :root {
   color-scheme: light dark;
+  font-family: system-ui, sans-serif;
   --layer-browser: oklch(40% 0.09 250);
   --layer-vue: oklch(38% 0.09 155);
   --layer-network: oklch(40% 0.09 75);
@@ -65,4 +66,10 @@ html.xray-on .xray-hit {
   .syntax {
     forced-color-adjust: none;
   }
+}
+
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
 }

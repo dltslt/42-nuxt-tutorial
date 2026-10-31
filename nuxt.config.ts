@@ -4,6 +4,16 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/ui', './modules/xray/index'],
   css: ['~/assets/css/main.css'],
+  // Remote font hosts are not required. The page uses the browser's UI font.
+  fonts: {
+    providers: {
+      fontshare: false,
+      google: false,
+      bunny: false,
+      googleicons: false,
+      fontsource: false
+    }
+  },
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
