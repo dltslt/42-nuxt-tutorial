@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
-      title: 'Lerch, explained',
+      title: 'Nuxt, explained',
       // Tells the browser the page has both schemes before the first paint.
       meta: [{ name: 'color-scheme', content: 'light dark' }]
     }

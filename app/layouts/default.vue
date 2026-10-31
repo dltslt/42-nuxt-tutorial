@@ -12,7 +12,7 @@ watch(enabled, (on) => {
     <header data-xray-ui class="sticky top-0 z-40 border-b border-default bg-default/80 backdrop-blur">
       <div class="mx-auto flex items-center gap-4 px-4 py-3" :class="enabled ? 'max-w-[96rem]' : 'max-w-6xl'">
         <div class="min-w-0">
-          <p class="text-sm font-semibold tracking-tight">Lerch, explained</p>
+          <p class="text-sm font-semibold tracking-tight">Nuxt, explained</p>
           <p class="truncate text-xs text-muted">From a row in the database to a word on the screen.</p>
         </div>
         <div class="ms-auto flex items-center gap-3">
