@@ -14,7 +14,9 @@ const session = useUserSession()
 const pending = ref(false)
 const error = ref('')
 const showPassword = ref(false)
+const phase = ref<'idle' | 'asking' | 'ready' | 'stale'>('idle')
 const probe = ref<Probe | null>(null)
+let askTicket = 0
 
 const oauth = ref(0)
 const oauthSteps = [
@@ -52,7 +54,19 @@ function responseOf(cause: unknown) {
   return response ?? null
 }
 
+function dropProbe() {
+  askTicket += 1
+  probe.value = null
+  if (phase.value !== 'idle') phase.value = 'stale'
+}
+
 async function ask() {
+  if (pending.value || phase.value === 'asking') return
+  const ticket = ++askTicket
+  phase.value = 'asking'
+  probe.value = null
+  await nextTick()
+  await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
   let status = 0
   let user: Actor | null = null
   let traceId = ''
@@ -76,7 +90,9 @@ async function ask() {
       missing = true
     }
   }
+  if (ticket !== askTicket) return
   probe.value = { status, user, cookie, missing }
+  phase.value = 'ready'
 }
 
 async function onSubmit(event: Event) {
@@ -95,7 +111,7 @@ async function onSubmit(event: Event) {
       body: { id: String(data.get('username') ?? ''), password: String(data.get('password') ?? '') }
     })
     await session.fetch()
-    await ask()
+    dropProbe()
   } catch {
     error.value = 'Unknown name or password.'
   } finally {
@@ -110,7 +126,7 @@ async function signOut() {
   try {
     await $fetch('/api/logout', { method: 'POST' })
     await session.fetch()
-    await ask()
+    dropProbe()
   } catch {
     error.value = 'Sign out did not finish.'
   } finally {
@@ -121,8 +137,11 @@ async function signOut() {
 const signedInName = computed(() => session.user.value?.name ?? '')
 
 const resultText = computed(() => {
+  if (phase.value === 'idle') return 'Not asked yet.'
+  if (phase.value === 'asking') return 'Asking…'
+  if (phase.value === 'stale') return 'The session changed. Ask again.'
   const current = probe.value
-  if (!current) return 'Asking…'
+  if (!current) return 'Not asked yet.'
   if (current.missing) return 'This request is no longer in memory. Ask again.'
   const carried = current.cookie
     ? `This request carried \`${current.cookie.name}\`, ${current.cookie.bytes} bytes. The sealed value is not in the trace.`
@@ -130,10 +149,6 @@ const resultText = computed(() => {
   if (current.status === 200) return `Status 200. The handler returned ${current.user?.name ?? 'the user'}. ${carried}`
   if (current.status === 401) return `Status 401. \`requireUserSession\` found no user. ${carried}`
   return `Status ${current.status || 'unknown'}. ${carried}`
-})
-
-onMounted(() => {
-  ask()
 })
 </script>
 
@@ -191,7 +206,15 @@ onMounted(() => {
       <div class="flex flex-wrap gap-2">
         <button type="submit" class="rounded-md px-3 py-2 text-sm ring ring-default">Sign in</button>
         <button type="button" class="rounded-md px-3 py-2 text-sm ring ring-default" @click="signOut">Sign out</button>
-        <button type="button" class="rounded-md px-3 py-2 text-sm ring ring-default" @click="ask">Ask who I am</button>
+        <button
+          type="button"
+          class="rounded-md px-3 py-2 text-sm ring ring-default"
+          :disabled="pending || phase === 'asking'"
+          :aria-busy="phase === 'asking'"
+          @click="ask"
+        >
+          {{ phase === 'asking' ? 'Asking…' : 'Ask who I am' }}
+        </button>
       </div>
       <p v-if="error" role="alert" class="text-sm">{{ error }}</p>
     </form>
@@ -200,7 +223,7 @@ onMounted(() => {
   <section class="mt-10" aria-labelledby="session-title">
     <h2 id="session-title" class="text-lg font-semibold tracking-tight text-highlighted">The cookie on the next request</h2>
     <p class="mt-1 max-w-xl text-sm leading-relaxed text-pretty text-muted">
-      <InlineText text="Sign in tells the browser to store `nuxt-auth-session`. Page script cannot read that header. `GET /api/me` is the request that shows it. Turn on X-ray, open the sample, and point at a word: the network card names the same cookie when the browser sent it." />
+      <InlineText text="Sign in tells the browser to store `nuxt-auth-session`. Page script cannot read that header. Ask who I am sends `GET /api/me`, and that card shows the answer. Turn on X-ray, open the sample, and point at a word: the network card names the same cookie when the browser sent it." />
     </p>
     <div class="mt-4 grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr))">
       <article class="layer-card p-3" :style="{ borderLeftColor: 'var(--layer-vue)', background: 'var(--layer-vue-bg)' }">
@@ -210,7 +233,7 @@ onMounted(() => {
           <template v-else>No session in the page.</template>
         </p>
       </article>
-      <article class="layer-card p-3" :style="{ borderLeftColor: 'var(--layer-network)', background: 'var(--layer-network-bg)' }">
+      <article class="layer-card p-3" :aria-busy="phase === 'asking'" :style="{ borderLeftColor: 'var(--layer-network)', background: 'var(--layer-network-bg)' }">
         <h3 class="text-sm font-semibold">GET /api/me</h3>
         <p class="mt-2 text-sm leading-relaxed text-pretty"><InlineText :text="resultText" /></p>
       </article>
