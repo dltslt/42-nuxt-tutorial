@@ -4,6 +4,9 @@ This repository was created in the last stage of the 42 common core, as preparat
 
 It is not a full Nuxt course. It is a small, working web application meant to help you understand how a Nuxt app is built and how it works: what runs in the browser, what runs on the server, and where the data lives.
 
+> [!NOTE]
+> **AI Disclosure:** Everything in this repository — the codebase, tutorial chapters, test suite, and documentation — was generated with AI.
+
 ## Overview
 
 Every piece of text on the screen comes from somewhere. Here, the path is always the same:
