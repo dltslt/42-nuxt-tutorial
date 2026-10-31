@@ -1,29 +1,53 @@
 <script setup lang="ts">
-defineProps<{
-  board: {
-    columns: Array<{
-      id: string
-      title: string
-      state: string
-      tasks: Array<{
-        id: string
-        title: string
-        level: string
-        lead: string | null
-        parent_title: string | null
-      }>
-    }>
-    blockers: Array<{
-      id: string
-      severity: string
-      blocker_title: string
-      blocked_title: string
-    }>
-  }
-}>()
+import { placeTask, type Board, type BoardTask } from '../../utils/board'
+
+const props = defineProps<{ board: Board }>()
 
 const { enabled } = useXray()
 const traces = useTraceIds()
+const origins = useRowOrigins()
+const replay = useReplay()
+const moving = ref('')
+const moveError = ref('')
+
+function nextColumn(columnId: string) {
+  const index = props.board.columns.findIndex(column => column.id === columnId)
+  const following = props.board.columns[(index + 1) % props.board.columns.length]
+  return following ?? props.board.columns[0]
+}
+
+async function move(task: BoardTask) {
+  if (moving.value) return
+  const next = nextColumn(task.column_id)
+  if (!next) return
+  moving.value = task.id
+  moveError.value = ''
+  try {
+    // xray:move-fetch
+    const response = await $fetch.raw<{ tasks: BoardTask[] }>(`/api/tasks/${task.id}`, {
+      method: 'PATCH',
+      body: { column_id: next.id }
+    })
+    // /xray:move-fetch
+    traces.value = rememberTrace(traces.value, 'move-fetch', response.headers.get('x-trace-id'))
+    const moved = response._data?.tasks[0]
+    if (!moved) return
+    origins.value = { ...origins.value, [moved.id]: 'move-fetch' }
+    placeTask(props.board, moved)
+    replay.value = {
+      words: moved.title,
+      rowId: moved.id,
+      field: 'title',
+      query: 'tasks',
+      traceId: traces.value['move-fetch'] ?? '',
+      snippets: { template: 'task-title', fetch: 'move-fetch', handler: 'move-handler' }
+    }
+  } catch (cause) {
+    moveError.value = cause instanceof Error ? cause.message : 'The task did not move'
+  } finally {
+    moving.value = ''
+  }
+}
 
 function columnHit(column: { id: string, title: string }) {
   return {
@@ -50,7 +74,9 @@ function blockerHit(blocker: { id: string, blocker_title: string, blocked_title:
 
 <template>
   <div>
-    <div class="grid gap-3 md:grid-cols-3">
+    <BoardTaskForm :board="board" />
+    <p v-if="moveError" class="mt-3 text-sm text-error" role="alert">{{ moveError }}</p>
+    <div class="mt-6 grid gap-3 md:grid-cols-3">
       <section
         v-for="column in board.columns"
         :key="column.id"
@@ -68,7 +94,7 @@ function blockerHit(blocker: { id: string, blocker_title: string, blocked_title:
         </header>
         <ul v-if="column.tasks.length" class="mt-3 flex flex-col gap-2">
           <li v-for="task in column.tasks" :key="task.id">
-            <BoardTaskCard :task="task" />
+            <BoardTaskCard :task="task" :next-title="nextColumn(column.id)?.title ?? ''" @move="move(task)" />
           </li>
         </ul>
         <p v-else class="mt-8 text-center text-xs text-muted">Nothing here.</p>

@@ -77,9 +77,26 @@ function findNamedRow(node: unknown, table: string, rowId: string): Record<strin
   return null
 }
 
+function statementLayer(query: QueryTrace | undefined, title: string): StoryLayer {
+  return {
+    layer: 'database',
+    name: 'Database',
+    title,
+    sentence: query
+      ? (query.params.length
+          ? `SQLite ran this in ${query.ms} ms. Each ? is a parameter, listed under the statement.`
+          : `SQLite ran this in ${query.ms} ms. This statement has no parameters.`)
+      : 'This request did not record a statement for that name.',
+    sql: query?.sql,
+    params: query?.params ?? []
+  }
+}
+
 export function buildStory(hit: XrayHit, trace: RequestTrace, sources: Record<string, Snippet>): StoryLayer[] {
   const query = trace.queries.find(item => item.name === hit.query)
+  const write = trace.queries.find(item => item.name === 'insert-task' || item.name === 'move-task')
   const row = query?.rows.find(item => String(item.id) === hit.rowId) ?? null
+  const board = hit.snippets.fetch === 'board-fetch'
   return [
     {
       layer: 'browser',
@@ -98,8 +115,10 @@ export function buildStory(hit: XrayHit, trace: RequestTrace, sources: Record<st
     {
       layer: 'vue',
       name: 'Vue',
-      title: 'The page asked for the board',
-      sentence: 'The page does not contain the tasks. useFetch calls the server and keeps the JSON.',
+      title: board ? 'The page asked for the board' : 'The page sent the change',
+      sentence: board
+        ? 'The page does not contain the tasks. useFetch calls the server and keeps the JSON.'
+        : 'The click called the server and kept the JSON it sent back. Vue then updated the board from that object.',
       snippet: sources[hit.snippets.fetch]
     },
     {
@@ -117,18 +136,8 @@ export function buildStory(hit: XrayHit, trace: RequestTrace, sources: Record<st
       sentence: 'A file under server/api becomes a URL. This function ran for the request.',
       snippet: sources[hit.snippets.handler]
     },
-    {
-      layer: 'database',
-      name: 'Database',
-      title: 'The statement that ran',
-      sentence: query
-        ? (query.params.length
-            ? `SQLite ran this in ${query.ms} ms. Each ? is a parameter, listed under the statement.`
-            : `SQLite ran this in ${query.ms} ms. This statement has no parameters.`)
-        : 'This request did not record a statement for that name.',
-      sql: query?.sql,
-      params: query?.params ?? []
-    },
+    ...(write ? [statementLayer(write, 'The change')] : []),
+    statementLayer(query, 'The statement that ran'),
     {
       layer: 'database',
       name: 'Database',

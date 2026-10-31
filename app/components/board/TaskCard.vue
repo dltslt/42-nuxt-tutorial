@@ -7,19 +7,25 @@ const props = defineProps<{
     lead: string | null
     parent_title: string | null
   }
+  nextTitle: string
 }>()
+
+const emit = defineEmits<{ move: [] }>()
 
 const { enabled } = useXray()
 const traces = useTraceIds()
+const origins = useRowOrigins()
 
 function hit(words: string, field: string) {
+  const fetch = origins.value[props.task.id] ?? 'board-fetch'
+  const handler = fetch === 'create-fetch' ? 'create-handler' : fetch === 'move-fetch' ? 'move-handler' : 'board-handler'
   return {
     words,
     rowId: props.task.id,
     field,
     query: 'tasks',
-    traceId: traces.value['board-fetch'] ?? '',
-    snippets: { template: `task-${field}`, fetch: 'board-fetch', handler: 'board-handler' }
+    traceId: traces.value[fetch] ?? '',
+    snippets: { template: `task-${field}`, fetch, handler }
   }
 }
 </script>
@@ -44,6 +50,9 @@ function hit(words: string, field: string) {
         <!-- /xray:task-lead -->
       </template>
     </p>
+    <button type="button" class="mt-2 text-xs text-muted underline-offset-2 hover:underline" @click="emit('move')">
+      Move to {{ nextTitle }}
+    </button>
     <p v-if="task.parent_title" class="mt-1 text-xs text-muted">
       inside
       <!-- xray:task-parent_title -->

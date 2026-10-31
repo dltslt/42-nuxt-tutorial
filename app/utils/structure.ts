@@ -19,17 +19,24 @@ const rowProps: Record<string, { query: string, template: string, fetch: string,
   task: { query: 'tasks', template: 'task-title', fetch: 'board-fetch', handler: 'board-handler' }
 }
 
-function rowLink(props: Record<string, unknown>, traces: Record<string, string>): XrayHit | undefined {
+function handlerFor(fetch: string, fallback: string) {
+  if (fetch === 'create-fetch') return 'create-handler'
+  if (fetch === 'move-fetch') return 'move-handler'
+  return fallback
+}
+
+function rowLink(props: Record<string, unknown>, traces: Record<string, string>, origins: Record<string, string>): XrayHit | undefined {
   for (const [name, target] of Object.entries(rowProps)) {
     const row = props[name] as { id?: string, title?: string } | undefined
     if (!row?.id || !row.title) continue
+    const fetch = origins[row.id] ?? target.fetch
     return {
       words: row.title,
       rowId: row.id,
       field: 'title',
       query: target.query,
-      traceId: traces[target.fetch] ?? '',
-      snippets: { template: target.template, fetch: target.fetch, handler: target.handler }
+      traceId: traces[fetch] ?? '',
+      snippets: { template: target.template, fetch, handler: handlerFor(fetch, target.handler) }
     }
   }
   return undefined
@@ -80,7 +87,7 @@ function loopStep(loop: Element): StructureStep {
   }
 }
 
-function componentStep(instance: Instance, usedAt: string | null, traces: Record<string, string>): StructureStep {
+function componentStep(instance: Instance, usedAt: string | null, traces: Record<string, string>, origins: Record<string, string>): StructureStep {
   const file = fileOf(instance)
   if (file === 'app/app.vue') {
     return {
@@ -112,7 +119,7 @@ function componentStep(instance: Instance, usedAt: string | null, traces: Record
     title: `<${name}> from ${file}`,
     sentence: `A component is a reusable piece of template with its own inputs, called props, like a function's parameters. Nobody imports it: Nuxt finds ${file} and makes it available everywhere as <${name}>. The parent passed these props:`,
     props: { ...instance.props },
-    link: rowLink(instance.props, traces),
+    link: rowLink(instance.props, traces, origins),
     place: placeOf(usedAt) ?? { file, line: 1 }
   }
 }
@@ -130,7 +137,7 @@ function libraryStep(instances: Instance[], el: Element): StructureStep {
   }
 }
 
-export function buildStructure(el: Element, route: { path: string }, fromServer: boolean | null, traces: Record<string, string>): StructureStep[] {
+export function buildStructure(el: Element, route: { path: string }, fromServer: boolean | null, traces: Record<string, string>, origins: Record<string, string>): StructureStep[] {
   const steps: StructureStep[] = []
   const chain = chainOf(el)
   const page = chain.find(instance => fileOf(instance).startsWith('app/pages/'))
@@ -152,7 +159,7 @@ export function buildStructure(el: Element, route: { path: string }, fromServer:
     // Wrappers like NuxtLayout and RouterView sit between our files; they are plumbing, not the lesson.
     library = []
     const root = instance.subTree.el as Element | null
-    steps.push(componentStep(instance, root instanceof Element ? root.getAttribute('data-xray-use') : null, traces))
+    steps.push(componentStep(instance, root instanceof Element ? root.getAttribute('data-xray-use') : null, traces, origins))
     for (const loop of loopsInside(el, instance)) steps.push(loopStep(loop))
   }
   if (library.length) steps.push(libraryStep(library, el))

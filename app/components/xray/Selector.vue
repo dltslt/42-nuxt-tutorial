@@ -25,8 +25,12 @@ function onMove(event: PointerEvent) {
 function onClick(event: MouseEvent) {
   const el = pick(event.target)
   if (!el) return
-  event.preventDefault()
-  event.stopPropagation()
+  // Tagged words are only there to be read. Other controls, such as Add task, still do their job.
+  const tagged = event.target instanceof Element && event.target.closest('.xray-hit')
+  if (tagged) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
   pin(pinned.value === el ? null : el)
 }
 

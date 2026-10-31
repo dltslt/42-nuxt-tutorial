@@ -15,7 +15,7 @@ const { data, error } = await useFetch('/api/board', {
   <div>
     <h1 class="text-2xl font-semibold tracking-tight text-highlighted">The board</h1>
     <p class="mt-2 max-w-xl text-sm leading-relaxed text-muted">
-      These cards are not typed into the page. Turn on X-ray and point at anything. For an element, the panel shows the components and template lines that drew it. For underlined words, it follows them through the request and the server down to the row that holds them.
+      These cards are not typed into the page. Turn on X-ray and point at anything. For an element, the panel shows the components and template lines that drew it. For underlined words, it follows them through the request and the server down to the row that holds them. Add a task, or move one: that request is followed the same way.
     </p>
 
     <UAlert

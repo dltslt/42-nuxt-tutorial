@@ -8,7 +8,8 @@ const { $xrayFromServer } = useNuxtApp()
 const { showData } = useXray()
 
 const traces = useTraceIds()
-const steps = computed(() => buildStructure(props.el, route, $xrayFromServer(props.el), traces.value))
+const origins = useRowOrigins()
+const steps = computed(() => buildStructure(props.el, route, $xrayFromServer(props.el), traces.value, origins.value))
 
 function key(step: StructureStep) {
   return step.place ? `${step.place.file}:${step.place.line}` : ''

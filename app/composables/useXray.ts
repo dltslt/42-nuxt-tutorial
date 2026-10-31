@@ -21,6 +21,15 @@ export function rememberTrace(ids: Record<string, string>, marker: string, id: s
   return { ...ids, [marker]: id }
 }
 
+// Which request last produced a row. Cards from the first load stay on board-fetch.
+export function useRowOrigins() {
+  return useState<Record<string, string>>('xray-row-origins', () => ({}))
+}
+
+export function useReplay() {
+  return useState<XrayHit | null>('xray-replay', () => null)
+}
+
 export type XrayElement = HTMLElement & { _xrayHit?: XrayHit }
 
 // DOM elements cannot go into the SSR payload, so the selection lives in plain refs set only in the browser.
