@@ -37,6 +37,12 @@ const failure = ref('')
 const status = ref<number | null>(null)
 const body = ref('')
 
+watch(selected, () => {
+  failure.value = ''
+  status.value = null
+  body.value = ''
+})
+
 async function send() {
   const route = current.value
   if (!route.call) return
