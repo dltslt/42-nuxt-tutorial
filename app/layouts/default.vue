@@ -25,7 +25,7 @@ watch(enabled, (on) => {
       class="mx-auto grid gap-8 px-4 py-6"
       :class="enabled ? 'max-w-[96rem] md:grid-cols-[11rem_1fr] lg:grid-cols-[11rem_1fr_minmax(24rem,32rem)]' : 'max-w-6xl md:grid-cols-[11rem_1fr]'"
     >
-      <nav aria-label="Chapters">
+      <nav class="chapter-nav" aria-label="Chapters">
         <p class="text-xs font-medium uppercase tracking-wide text-muted">Chapters</p>
         <p class="mt-3 text-sm font-medium text-highlighted">The board</p>
         <p class="mt-3 text-xs leading-relaxed text-muted">The other chapters follow this screen.</p>

@@ -1,48 +1,48 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-/* Kanagawa, from rebelot/kanagawa.nvim: lotus in light, wave in dark. */
+/* Kanagawa, from rebelot/kanagawa.nvim. Light uses the cool whites; dark is dragon. */
 @theme static {
   --color-kanagawa-50: #c7d7e0;
   --color-kanagawa-100: #b5cbd2;
   --color-kanagawa-200: #9fb5c9;
-  --color-kanagawa-300: #7fb4ca;
-  --color-kanagawa-400: #7e9cd8;
+  --color-kanagawa-300: #8ba4b0;
+  --color-kanagawa-400: #8ba4b0;
   --color-kanagawa-500: #4d699b;
   --color-kanagawa-600: #5d57a3;
   --color-kanagawa-700: #4d699b;
-  --color-kanagawa-800: #2d4f67;
-  --color-kanagawa-900: #223249;
-  --color-kanagawa-950: #1f1f28;
+  --color-kanagawa-800: #282727;
+  --color-kanagawa-900: #181616;
+  --color-kanagawa-950: #0d0c0c;
 }
 
 :root {
   color-scheme: light dark;
   font-family: system-ui, sans-serif;
   --accent-light: #4d699b;
-  --accent-dark: #7e9cd8;
+  --accent-dark: #8ba4b0;
   accent-color: var(--accent-light);
 
-  /* lotus */
-  --ui-bg: #f2ecbc;
-  --ui-bg-muted: #e5ddb0;
-  --ui-bg-elevated: #e7dba0;
-  --ui-bg-accented: #d5cea3;
+  /* Cool whites from the palette, not the yellow lotus paper. */
+  --ui-bg: #c9cbd1;
+  --ui-bg-muted: #d7e3d8;
+  --ui-bg-elevated: #c7d7e0;
+  --ui-bg-accented: #b5cbd2;
   --ui-bg-inverted: #43436c;
-  --ui-text: #545464;
+  --ui-text: #43436c;
   --ui-text-highlighted: #43436c;
-  --ui-text-toned: #545464;
-  --ui-text-muted: #6b6962;
-  --ui-text-dimmed: #6b6962;
-  --ui-text-inverted: #f2ecbc;
-  --ui-border: #84806e;
-  --ui-border-muted: #84806e;
-  --ui-border-accented: #716e61;
+  --ui-text-toned: #43436c;
+  --ui-text-muted: #545464;
+  --ui-text-dimmed: #545464;
+  --ui-text-inverted: #c9cbd1;
+  --ui-border: #545464;
+  --ui-border-muted: #545464;
+  --ui-border-accented: #43436c;
   --ui-border-inverted: #43436c;
   --ui-primary: #4d699b;
 
   --layer-browser: #4d699b;
-  --layer-vue: #596d46;
+  --layer-vue: #4b5a3c;
   --layer-network: #77713f;
   --layer-server: #624c83;
   --layer-database: #c84053;
@@ -81,30 +81,56 @@ html.dark {
   color: #43436c;
 }
 
-.dark {
-  /* wave */
-  --ui-bg: #1f1f28;
-  --ui-bg-muted: #2a2a37;
-  --ui-bg-elevated: #363646;
-  --ui-bg-accented: #363646;
-  --ui-bg-inverted: #dcd7ba;
-  --ui-text: #c8c093;
-  --ui-text-highlighted: #dcd7ba;
-  --ui-text-toned: #c8c093;
-  --ui-text-muted: #9cabca;
-  --ui-text-dimmed: #938aa9;
-  --ui-text-inverted: #1f1f28;
-  --ui-border: #727169;
-  --ui-border-muted: #727169;
-  --ui-border-accented: #938aa9;
-  --ui-border-inverted: #dcd7ba;
-  --ui-primary: #7e9cd8;
+.chapter-nav {
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  background: #d7e3d8;
+}
 
-  --layer-browser: #7e9cd8;
-  --layer-vue: #98bb6c;
-  --layer-network: #e6c384;
-  --layer-server: #957fb8;
-  --layer-database: #ffa066;
+.board-column:nth-child(1) {
+  background: #c7d7e0;
+}
+
+.board-column:nth-child(2) {
+  background: #d7e3d8;
+}
+
+.board-column:nth-child(3) {
+  background: #bad2b2;
+}
+
+.board-blockers {
+  background: #c7d7e0;
+}
+
+.board-column article {
+  background: var(--ui-bg);
+}
+
+.dark {
+  /* dragon */
+  --ui-bg: #181616;
+  --ui-bg-muted: #282727;
+  --ui-bg-elevated: #393836;
+  --ui-bg-accented: #393836;
+  --ui-bg-inverted: #c5c9c5;
+  --ui-text: #c5c9c5;
+  --ui-text-highlighted: #c5c9c5;
+  --ui-text-toned: #c5c9c5;
+  --ui-text-muted: #a6a69c;
+  --ui-text-dimmed: #a6a69c;
+  --ui-text-inverted: #181616;
+  --ui-border: #7a8382;
+  --ui-border-muted: #7a8382;
+  --ui-border-accented: #a6a69c;
+  --ui-border-inverted: #c5c9c5;
+  --ui-primary: #8ba4b0;
+
+  --layer-browser: #8ba4b0;
+  --layer-vue: #8a9a7b;
+  --layer-network: #c4b28a;
+  --layer-server: #8992a7;
+  --layer-database: #b6927b;
   --layer-browser-bg: color-mix(in oklab, var(--layer-browser) 18%, var(--ui-bg));
   --layer-vue-bg: color-mix(in oklab, var(--layer-vue) 18%, var(--ui-bg));
   --layer-network-bg: color-mix(in oklab, var(--layer-network) 18%, var(--ui-bg));
@@ -113,9 +139,20 @@ html.dark {
   --layer-ink: var(--ui-text);
 }
 
+.dark .chapter-nav,
+.dark .board-column,
+.dark .board-blockers,
+.dark .xray-panel {
+  background: #282727;
+}
+
+.dark .board-column article {
+  background: #393836;
+}
+
 html.dark ::selection {
-  background: #2d4f67;
-  color: #dcd7ba;
+  background: #223249;
+  color: #c5c9c5;
 }
 
 .xray-hit {
@@ -168,6 +205,7 @@ html.xray-on main {
   align-self: start;
   max-height: calc(100dvh - 6rem);
   overflow: auto;
+  background: #c7d7e0;
 }
 
 .layer-card {

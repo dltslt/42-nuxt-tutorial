@@ -51,7 +51,7 @@ function blockerHit(blocker: { id: string, blocker_title: string, blocked_title:
       <section
         v-for="column in board.columns"
         :key="column.id"
-        class="flex min-h-64 flex-col rounded-xl bg-elevated/60 p-3 ring ring-default"
+        class="board-column flex min-h-64 flex-col rounded-xl p-3 ring ring-default"
       >
         <header>
           <!-- xray:column-title -->
@@ -72,7 +72,7 @@ function blockerHit(blocker: { id: string, blocker_title: string, blocked_title:
       </section>
     </div>
 
-    <section class="mt-4 rounded-xl bg-elevated/60 p-4 ring ring-default" aria-label="Blockers">
+    <section class="board-blockers mt-4 rounded-xl p-4 ring ring-default" aria-label="Blockers">
       <h2 class="text-sm font-semibold text-highlighted">Blockers</h2>
       <ul class="mt-2 flex flex-col gap-1">
         <li v-for="blocker in board.blockers" :key="blocker.id" class="text-sm">
