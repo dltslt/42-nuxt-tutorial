@@ -1,5 +1,11 @@
 <script setup lang="ts">
 const { enabled } = useXray()
+const route = useRoute()
+
+const chapters = [
+  { to: '/', title: 'Welcome' },
+  { to: '/sample', title: 'Sample content' }
+]
 
 watch(enabled, (on) => {
   if (!import.meta.client) return
@@ -27,8 +33,19 @@ watch(enabled, (on) => {
     >
       <nav class="chapter-nav" aria-label="Chapters">
         <p class="text-xs font-medium uppercase tracking-wide text-muted">Chapters</p>
-        <p class="mt-3 text-sm font-medium text-highlighted">The board</p>
-        <p class="mt-3 text-xs leading-relaxed text-muted">The other chapters follow this screen.</p>
+        <ul class="mt-3 space-y-2">
+          <li v-for="chapter in chapters" :key="chapter.to">
+            <NuxtLink
+              :to="chapter.to"
+              class="text-sm"
+              :class="route.path === chapter.to ? 'font-medium text-highlighted' : 'text-muted'"
+              :aria-current="route.path === chapter.to ? 'page' : undefined"
+            >
+              {{ chapter.title }}
+            </NuxtLink>
+          </li>
+        </ul>
+        <p class="mt-3 text-xs leading-relaxed text-muted">The other chapters follow these screens.</p>
       </nav>
       <main class="min-w-0">
         <slot />

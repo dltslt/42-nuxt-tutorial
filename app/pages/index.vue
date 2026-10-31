@@ -1,34 +1,15 @@
-<script setup lang="ts">
-const traces = useTraceIds()
-
-// xray:board-fetch
-// useFetch asks GET /api/board while the server builds the HTML, then the browser reuses that result.
-const { data, error } = await useFetch('/api/board', {
-  onResponse({ response }) {
-    traces.value = rememberTrace(traces.value, 'board-fetch', response.headers.get('x-trace-id'))
-  }
-})
-// /xray:board-fetch
-</script>
-
 <template>
   <div>
-    <h1 class="text-2xl font-semibold tracking-tight text-highlighted">The board</h1>
-    <p class="mt-2 max-w-xl text-sm leading-relaxed text-muted">
-      These cards are not typed into the page. Turn on X-ray and point at anything. For an element, the panel shows the components and template lines that drew it. For underlined words, it follows them through the request and the server down to the row that holds them. Add a task, or move one: that request is followed the same way.
+    <h1 class="text-2xl font-semibold tracking-tight text-pretty text-highlighted">Welcome</h1>
+    <p class="mt-2 max-w-xl text-sm leading-relaxed text-pretty text-muted">
+      This tutorial is for a team that already writes <strong class="term">C and C++</strong>. It shows how a <strong class="term">Nuxt</strong> application is put together, from the <strong class="term-browser">browser</strong> through the <strong class="term-network">request</strong> and the <strong class="term-server">server</strong> to a row in the <strong class="term-database">database</strong>. The running example is shaped like <strong class="term">Lerch</strong>.
     </p>
-
-    <UAlert
-      v-if="error"
-      class="mt-6"
-      color="error"
-      title="The board did not load"
-      :description="error.message"
-    />
-    <template v-else-if="data">
-      <BoardTaskBoard class="mt-6" :board="data" />
-      <XrayReplay />
-      <XrayJourney />
-    </template>
+    <p class="mt-4 max-w-xl text-sm leading-relaxed text-pretty text-muted">
+      <strong class="term">X-ray</strong> is how this tutorial is read. Turn it on in the header and point at a word. It shows the path from that word on the screen back through the <strong class="term-vue">page</strong>, the <strong class="term-network">request</strong>, the <strong class="term-server">server</strong>, and the <strong class="term-database">row</strong>. Leave it on while you go through the app.
+    </p>
+    <p class="mt-6 text-sm text-pretty text-muted">
+      Continue with
+      <NuxtLink to="/sample" class="font-medium text-highlighted underline decoration-1 underline-offset-2">Sample content</NuxtLink>.
+    </p>
   </div>
 </template>

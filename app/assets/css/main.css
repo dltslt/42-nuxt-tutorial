@@ -1,56 +1,56 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-/* Kanagawa, from rebelot/kanagawa.nvim. Light uses the cool whites; dark is dragon. */
+/* Kanagawa, from rebelot/kanagawa.nvim. Light is one bright pastel per hue. Dark is dragon. */
 @theme static {
-  --color-kanagawa-50: #c7d7e0;
-  --color-kanagawa-100: #b5cbd2;
-  --color-kanagawa-200: #9fb5c9;
-  --color-kanagawa-300: #8ba4b0;
-  --color-kanagawa-400: #8ba4b0;
-  --color-kanagawa-500: #4d699b;
-  --color-kanagawa-600: #5d57a3;
-  --color-kanagawa-700: #4d699b;
-  --color-kanagawa-800: #282727;
-  --color-kanagawa-900: #181616;
-  --color-kanagawa-950: #0d0c0c;
+  --color-kanagawa-50: #e8ece8; /* dragonWhite lifted */
+  --color-kanagawa-100: #f9d791; /* lotusYellow4 */
+  --color-kanagawa-200: #c7d7e0; /* lotusBlue1 */
+  --color-kanagawa-300: #b7d0ae; /* lotusGreen3 */
+  --color-kanagawa-400: #a3d4d5; /* lightBlue */
+  --color-kanagawa-500: #4d699b; /* lotusBlue4 */
+  --color-kanagawa-600: #d27e99; /* sakuraPink */
+  --color-kanagawa-700: #624c83; /* lotusViolet4 */
+  --color-kanagawa-800: #282727; /* dragonBlack4 */
+  --color-kanagawa-900: #181616; /* dragonBlack3 */
+  --color-kanagawa-950: #0d0c0c; /* dragonBlack0 */
 }
 
 :root {
   color-scheme: light dark;
   font-family: system-ui, sans-serif;
-  --accent-light: #4d699b;
-  --accent-dark: #8ba4b0;
+  --accent-light: #d27e99; /* sakuraPink */
+  --accent-dark: #8ba4b0; /* dragonBlue2 */
   accent-color: var(--accent-light);
 
-  /* Cool whites from the palette, not the yellow lotus paper. */
-  --ui-bg: #c9cbd1;
-  --ui-bg-muted: #d7e3d8;
-  --ui-bg-elevated: #c7d7e0;
-  --ui-bg-accented: #b5cbd2;
-  --ui-bg-inverted: #43436c;
-  --ui-text: #43436c;
+  /* One pastel of each hue. Ink stays lotusInk so the words stay readable. */
+  --ui-bg: #e8ece8; /* dragonWhite, each channel +35 */
+  --ui-bg-muted: #dcd7ba; /* lotusGray */
+  --ui-bg-elevated: #d7e3d8; /* lotusCyan */
+  --ui-bg-accented: #a3d4d5; /* lightBlue */
+  --ui-bg-inverted: #43436c; /* lotusInk2 */
+  --ui-text: #43436c; /* lotusInk2 */
   --ui-text-highlighted: #43436c;
   --ui-text-toned: #43436c;
-  --ui-text-muted: #545464;
+  --ui-text-muted: #545464; /* lotusInk1 */
   --ui-text-dimmed: #545464;
-  --ui-text-inverted: #c9cbd1;
-  --ui-border: #545464;
-  --ui-border-muted: #545464;
+  --ui-text-inverted: #e8ece8; /* dragonWhite, each channel +35 */
+  --ui-border: #716e61; /* lotusGray2 */
+  --ui-border-muted: #716e61;
   --ui-border-accented: #43436c;
   --ui-border-inverted: #43436c;
-  --ui-primary: #4d699b;
+  --ui-primary: #4d699b; /* lotusBlue4 */
 
-  --layer-browser: #4d699b;
-  --layer-vue: #4b5a3c;
-  --layer-network: #77713f;
-  --layer-server: #624c83;
-  --layer-database: #c84053;
-  --layer-browser-bg: color-mix(in oklab, var(--layer-browser) 16%, var(--ui-bg));
-  --layer-vue-bg: color-mix(in oklab, #6f894e 16%, var(--ui-bg));
-  --layer-network-bg: color-mix(in oklab, var(--layer-network) 16%, var(--ui-bg));
-  --layer-server-bg: color-mix(in oklab, var(--layer-server) 14%, var(--ui-bg));
-  --layer-database-bg: color-mix(in oklab, var(--layer-database) 14%, var(--ui-bg));
+  --layer-browser: #4d699b; /* lotusBlue4 */
+  --layer-vue: #6f894e; /* lotusGreen */
+  --layer-network: #cc6d00; /* lotusOrange */
+  --layer-server: #624c83; /* lotusViolet4 */
+  --layer-database: #c84053; /* lotusRed */
+  --layer-browser-bg: #c7d7e0; /* lotusBlue1 */
+  --layer-vue-bg: #b7d0ae; /* lotusGreen3 */
+  --layer-network-bg: #f9d791; /* lotusYellow4 */
+  --layer-server-bg: #b8b4d0; /* oniViolet2 */
+  --layer-database-bg: #d9a594; /* lotusRed4 */
   --layer-ink: var(--ui-text);
 }
 
@@ -77,30 +77,76 @@ html.dark {
 }
 
 ::selection {
-  background: #b5cbd2;
+  background: #a3d4d5; /* lightBlue */
   color: #43436c;
 }
 
 .chapter-nav {
   border-radius: 0.75rem;
   padding: 0.75rem;
-  background: #d7e3d8;
+  background: #b8b4d0; /* oniViolet2 */
+  color: #624c83; /* lotusViolet4 */
+}
+
+.chapter-nav :is(a, p) {
+  color: #624c83; /* lotusViolet4 */
+}
+
+/* A few words in the chapter intros. The path words use the same colors as the layers. */
+.term {
+  font-weight: 600;
+  color: var(--ui-primary);
+}
+
+.term-browser,
+.term-vue,
+.term-network,
+.term-server,
+.term-database {
+  border-radius: 0.2rem;
+  padding-inline: 0.28em;
+  font-weight: 600;
+}
+
+.term-browser {
+  color: var(--layer-browser);
+  background: var(--layer-browser-bg);
+}
+
+.term-vue {
+  color: var(--layer-vue);
+  background: var(--layer-vue-bg);
+}
+
+.term-network {
+  color: var(--layer-network);
+  background: var(--layer-network-bg);
+}
+
+.term-server {
+  color: var(--layer-server);
+  background: var(--layer-server-bg);
+}
+
+.term-database {
+  color: var(--layer-database);
+  background: var(--layer-database-bg);
 }
 
 .board-column:nth-child(1) {
-  background: #c7d7e0;
+  background: #c7d7e0; /* lotusBlue1 */
 }
 
 .board-column:nth-child(2) {
-  background: #d7e3d8;
+  background: #ffa066; /* surimiOrange */
 }
 
 .board-column:nth-child(3) {
-  background: #bad2b2;
+  background: #b7d0ae; /* lotusGreen3 */
 }
 
 .board-blockers {
-  background: #c7d7e0;
+  background: #d9a594; /* lotusRed4 */
 }
 
 .board-column article {
@@ -205,7 +251,7 @@ html.xray-on main {
   align-self: start;
   max-height: calc(100dvh - 6rem);
   overflow: auto;
-  background: #c7d7e0;
+  background: #f9d791; /* lotusYellow4 */
 }
 
 .layer-card {

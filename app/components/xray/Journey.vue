@@ -69,7 +69,7 @@ const rows = computed(() => {
 </script>
 
 <template>
-  <section class="mt-8" aria-labelledby="journey-title">
+  <section id="layers" class="mt-8 scroll-mt-20" aria-labelledby="journey-title">
     <h2 id="journey-title" class="text-sm font-semibold text-highlighted">Two ways the words arrive</h2>
     <p class="mt-1 max-w-xl text-sm text-muted">
       The same layers. The first load does the work on the server and sends HTML. A later click sends one request and Vue patches the page.
