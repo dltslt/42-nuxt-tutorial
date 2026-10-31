@@ -78,28 +78,12 @@ const current = computed(() => languages.find(language => language.id === select
       </label>
     </div>
     <p class="sr-only" aria-live="polite">{{ current.name }}. {{ current.text.replaceAll('`', '') }}</p>
-  </section>
-
-  <section class="mt-10" aria-labelledby="samples-title">
-    <h2 id="samples-title" class="text-lg font-semibold tracking-tight text-highlighted">A few lines of each</h2>
-    <p class="mt-1 max-w-xl text-sm leading-relaxed text-pretty text-muted">
-      These are examples. They show the shape of each language.
-    </p>
-    <div class="mt-6 grid gap-6">
-      <article v-for="language in languages" :key="language.id">
-        <h3 :id="`sample-${language.id}`" class="text-sm font-semibold text-highlighted">{{ language.name }}</h3>
-        <p class="mt-1 max-w-xl text-sm leading-relaxed text-pretty text-muted">
-          <InlineText :text="language.sampleText" />
-        </p>
-        <div
-          class="sample mt-2"
-          tabindex="0"
-          role="region"
-          :aria-labelledby="`sample-${language.id}`"
-        >
-          <pre><code>{{ language.sample }}</code></pre>
-        </div>
-      </article>
-    </div>
+    <article class="mt-4">
+      <h3 id="language-sample" class="text-sm font-semibold text-highlighted">{{ current.name }}</h3>
+      <p class="mt-1 text-sm leading-relaxed text-pretty text-muted"><InlineText :text="current.sampleText" /></p>
+      <div class="sample mt-2" tabindex="0" role="region" aria-labelledby="language-sample">
+        <pre><code>{{ current.sample }}</code></pre>
+      </div>
+    </article>
   </section>
 </template>
