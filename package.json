@@ -1,5 +1,5 @@
 {
-  "name": "prototype-template",
+  "name": "nuxt-tutorial",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@12.16.1",
@@ -11,7 +11,11 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/ui": "^4.12.0",
+    "db0": "^0.4.2",
     "nuxt": "^4.6.3",
+    "shiki": "^4.5.0",
+    "tailwindcss": "^4.3.3",
     "vue": "^3.5.44",
     "vue-router": "^5.4.0"
   }
