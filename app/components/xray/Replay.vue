@@ -81,7 +81,7 @@ function go(next: number) {
     >
       <p class="text-xs font-semibold uppercase tracking-wide">{{ step + 1 }}. {{ current.name }}</p>
       <h3 class="mt-1 text-sm font-semibold">{{ current.title }}</h3>
-      <p class="mt-1 text-sm leading-relaxed">{{ current.sentence }}</p>
+      <p class="mt-1 text-sm leading-relaxed"><InlineText :text="current.sentence" /></p>
       <p v-if="current.quote" class="mt-3 text-lg font-medium">“{{ current.quote }}”</p>
       <div v-if="current.snippet" class="mt-3">
         <p class="mb-1 font-mono text-xs">{{ current.snippet.file }}:{{ current.snippet.start }}</p>

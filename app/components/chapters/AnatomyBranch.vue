@@ -19,8 +19,8 @@ defineProps<{ nodes: AnatomyNode[] }>()
           <span>{{ node.name }}</span>
         </summary>
         <div class="anatomy-body">
-          <p class="anatomy-becomes">{{ node.becomes }}</p>
-          <p>{{ node.text }}</p>
+          <p class="anatomy-becomes"><InlineText :text="node.becomes ?? ''" /></p>
+          <p><InlineText :text="node.text ?? ''" /></p>
         </div>
       </details>
     </li>

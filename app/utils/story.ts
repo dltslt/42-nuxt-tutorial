@@ -84,7 +84,7 @@ function statementLayer(query: QueryTrace | undefined, title: string): StoryLaye
     title,
     sentence: query
       ? (query.params.length
-          ? `SQLite ran this in ${query.ms} ms. Each ? is a parameter, listed under the statement.`
+          ? `SQLite ran this in ${query.ms} ms. Each \`?\` is a parameter, listed under the statement.`
           : `SQLite ran this in ${query.ms} ms. This statement has no parameters.`)
       : 'This request did not record a statement for that name.',
     sql: query?.sql,
@@ -109,7 +109,7 @@ export function buildStory(hit: XrayHit, trace: RequestTrace, sources: Record<st
       layer: 'vue',
       name: 'Vue',
       title: 'The template printed them',
-      sentence: 'A Vue file has a template. {{ }} prints one field of the object the component was given.',
+      sentence: 'A Vue file has a template. `{{ }}` prints one field of the object the component was given.',
       snippet: sources[hit.snippets.template]
     },
     {
@@ -117,7 +117,7 @@ export function buildStory(hit: XrayHit, trace: RequestTrace, sources: Record<st
       name: 'Vue',
       title: board ? 'The page asked for the board' : 'The page sent the change',
       sentence: board
-        ? 'The page does not contain the tasks. useFetch calls the server and keeps the JSON.'
+        ? 'The page does not contain the tasks. `useFetch` calls the server and keeps the JSON.'
         : 'The click called the server and kept the JSON it sent back. Vue then updated the board from that object.',
       snippet: sources[hit.snippets.fetch]
     },
@@ -133,7 +133,7 @@ export function buildStory(hit: XrayHit, trace: RequestTrace, sources: Record<st
       layer: 'server',
       name: 'Server',
       title: 'The route handler',
-      sentence: 'A file under server/api becomes a URL. This function ran for the request.',
+      sentence: 'A file under `server/api/` becomes a URL. This function ran for the request.',
       snippet: sources[hit.snippets.handler]
     },
     ...(write ? [statementLayer(write, 'The change')] : []),

@@ -82,7 +82,7 @@ function loopStep(loop: Element): StructureStep {
   return {
     kind: 'loop',
     title: `v-for="${expression}"`,
-    sentence: `This element is written once in the template. Vue repeats it for every entry of ${list}, like a for loop over an array, with ${item} as the loop variable. This is copy ${siblings.indexOf(loop) + 1} of ${siblings.length}.`,
+    sentence: `This element is written once in the template. Vue repeats it for every entry of \`${list}\`, like a \`for\` loop over an array, with \`${item}\` as the loop variable. This is copy ${siblings.indexOf(loop) + 1} of ${siblings.length}.`,
     place: placeOf(loc)
   }
 }
@@ -93,7 +93,7 @@ function componentStep(instance: Instance, usedAt: string | null, traces: Record
     return {
       kind: 'app',
       title: 'app/app.vue',
-      sentence: 'The outermost component. Every screen of the app is drawn inside it, like main() calling everything else.',
+      sentence: 'The outermost component. Every screen of the app is drawn inside it, like `main()` calling everything else.',
       place: { file, line: 1 }
     }
   }
@@ -101,7 +101,7 @@ function componentStep(instance: Instance, usedAt: string | null, traces: Record
     return {
       kind: 'layout',
       title: file,
-      sentence: 'A layout is the frame around pages: header, chapter list, X-ray column. <NuxtLayout> in app.vue picks it; default.vue is used unless a page asks for another.',
+      sentence: 'A layout is the frame around pages: header, chapter list, X-ray column. `<NuxtLayout>` in `app.vue` picks it; `default.vue` is used unless a page asks for another.',
       place: { file, line: 1 }
     }
   }
@@ -109,7 +109,7 @@ function componentStep(instance: Instance, usedAt: string | null, traces: Record
     return {
       kind: 'page',
       title: file,
-      sentence: 'A page is a component that a URL selects. <NuxtPage> in app.vue puts it here. The page also fetches the data the components below it receive.',
+      sentence: 'A page is a component that a URL selects. `<NuxtPage>` in `app.vue` puts it here. The page also fetches the data the components below it receive.',
       place: { file, line: 1 }
     }
   }
@@ -117,7 +117,7 @@ function componentStep(instance: Instance, usedAt: string | null, traces: Record
   return {
     kind: 'component',
     title: `<${name}> from ${file}`,
-    sentence: `A component is a reusable piece of template with its own inputs, called props, like a function's parameters. Nobody imports it: Nuxt finds ${file} and makes it available everywhere as <${name}>. The parent passed these props:`,
+    sentence: `A component is a reusable piece of template with its own inputs, called props, like a function's parameters. Nobody imports it: Nuxt finds \`${file}\` and makes it available everywhere as \`<${name}>\`. The parent passed these props:`,
     props: { ...instance.props },
     link: rowLink(instance.props, traces, origins),
     place: placeOf(usedAt) ?? { file, line: 1 }
@@ -131,7 +131,7 @@ function libraryStep(instances: Instance[], el: Element): StructureStep {
   return {
     kind: 'library',
     title: names.join(' › '),
-    sentence: 'This part is drawn by a component from a module, not by a file in this project. @nuxt/ui ships components like UBadge; installing the module made them usable everywhere. Its code is in node_modules; what we wrote is the line that uses it:',
+    sentence: 'This part is drawn by a component from a module, not by a file in this project. `@nuxt/ui` ships components like `UBadge`; installing the module made them usable everywhere. Its code is in `node_modules/`; what we wrote is the line that uses it:',
     names,
     place: usedAt
   }
@@ -145,7 +145,7 @@ export function buildStructure(el: Element, route: { path: string }, fromServer:
     steps.push({
       kind: 'route',
       title: `URL ${route.path}`,
-      sentence: `Nuxt turns every file under app/pages/ into a URL. ${fileOf(page)} became ${route.path}. Nobody wrote a routing table; the file name is the route.`
+      sentence: `Nuxt turns every file under \`app/pages/\` into a URL. \`${fileOf(page)}\` became \`${route.path}\`. Nobody wrote a routing table; the file name is the route.`
     })
   }
 
@@ -171,7 +171,7 @@ export function buildStructure(el: Element, route: { path: string }, fromServer:
       kind: 'element',
       title: `<${el.tagName.toLowerCase()}>`,
       sentence: classes.length
-        ? 'The element in the template. Its look comes from the class list: each Tailwind class is one CSS rule, so text-sm sets the font size and p-3 the padding.'
+        ? 'The element in the template. Its look comes from the class list: each Tailwind class is one CSS rule, so `text-sm` sets the font size and `p-3` the padding.'
         : 'The element in the template. It has no classes, so it looks the way the browser and its parent style it.',
       code: classes.join(' '),
       place: placeOf(loc)

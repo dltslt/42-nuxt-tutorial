@@ -44,18 +44,18 @@ const rows = computed(() => {
       layer: 'network',
       name: 'Network',
       first: first.value
-        ? `${first.value.method} ${first.value.path} ran on the server while it built the HTML. The browser did not ask for it again.`
+        ? `\`${first.value.method} ${first.value.path}\` ran on the server while it built the HTML. The browser did not ask for it again.`
         : 'The board request ran on the server. The browser did not ask for it again.',
-      click: action ? `${action.method} ${action.path}` : 'No request yet.'
+      click: action ? `\`${action.method} ${action.path}\`` : 'No request yet.'
     },
     {
       layer: 'server',
       name: 'Server',
-      first: 'server/api/board.get.ts read the rows and returned JSON, and the server turned that JSON into HTML.',
+      first: '`server/api/board.get.ts` read the rows and returned JSON, and the server turned that JSON into HTML.',
       click: action
         ? (action.path.includes('/api/tasks') && action.method === 'POST'
-            ? 'server/api/tasks.post.ts inserted the row and sent that row back.'
-            : 'server/api/tasks/[id].patch.ts updated the column and sent the row back.')
+            ? '`server/api/tasks.post.ts` inserted the row and sent that row back.'
+            : '`server/api/tasks/[id].patch.ts` updated the column and sent the row back.')
         : 'Waiting for a click.'
     },
     {
@@ -92,8 +92,8 @@ const rows = computed(() => {
             >
               {{ row.name }}
             </th>
-            <td class="px-2 py-2 align-top" :style="{ background: `var(--layer-${row.layer}-bg)` }">{{ row.first }}</td>
-            <td class="rounded-e-md px-2 py-2 align-top" :style="{ background: `var(--layer-${row.layer}-bg)` }">{{ row.click }}</td>
+            <td class="px-2 py-2 align-top" :style="{ background: `var(--layer-${row.layer}-bg)` }"><InlineText :text="row.first" /></td>
+            <td class="rounded-e-md px-2 py-2 align-top" :style="{ background: `var(--layer-${row.layer}-bg)` }"><InlineText :text="row.click" /></td>
           </tr>
         </tbody>
       </table>
