@@ -105,6 +105,13 @@ export const tree: AnatomyNode[] = [
             kind: 'url',
             becomes: '`/rendering`',
             text: 'The rendering chapter. Node renders it to HTML, and the page shows the time that render wrote.'
+          },
+          {
+            id: 'page-reactivity',
+            name: 'reactivity.vue',
+            kind: 'url',
+            becomes: '`/reactivity`',
+            text: 'The reactivity chapter. The page holds a `ref` for the title and the count, and a `computed` for the double.'
           }
         ]
       },

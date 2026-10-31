@@ -447,6 +447,42 @@ html.dark .shiki span {
   background: var(--ui-bg-muted);
 }
 
+.probe {
+  display: grid;
+  gap: 0.35rem;
+  align-content: start;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  background: var(--layer-vue-bg);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.probe h3,
+.probe-value,
+.probe-count {
+  margin: 0;
+}
+
+.probe-value {
+  font-family: ui-monospace, monospace;
+  font-size: 0.875rem;
+}
+
+.probe-count {
+  font-size: 0.75rem;
+  color: var(--ui-text-muted);
+}
+
+.probe-flash {
+  animation: probe-flash 0.7s ease;
+}
+
+@keyframes probe-flash {
+  from { outline-color: var(--layer-vue); }
+  to { outline-color: transparent; }
+}
+
 @media (min-width: 48rem) {
   .socket {
     grid-template-columns: 1fr minmax(9rem, 14rem) 1fr;
@@ -475,6 +511,10 @@ html.dark .shiki span {
   .socket-packet {
     transition: none;
   }
+
+  .probe-flash {
+    animation: none;
+  }
 }
 
 @media (forced-colors: active) {
@@ -482,7 +522,8 @@ html.dark .shiki span {
   .anatomy-body,
   .socket-packet,
   .anatomy-kind,
-  .token {
+  .token,
+  .probe {
     border: 1px solid CanvasText;
   }
 }
