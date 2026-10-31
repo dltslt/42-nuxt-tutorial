@@ -92,6 +92,29 @@ html.dark {
   color: #624c83; /* lotusViolet4 */
 }
 
+.chapter-nav a {
+  display: grid;
+}
+
+.chapter-nav a > span {
+  grid-area: 1 / 1;
+}
+
+/* Holds the bold width and height so a hover does not reflow the list. */
+.chapter-nav-sizer {
+  font-weight: 700;
+  visibility: hidden;
+}
+
+.chapter-nav a:hover {
+  font-weight: 700;
+}
+
+.chapter-nav a[aria-current="page"] {
+  color: var(--ui-text);
+  font-weight: 700;
+}
+
 /* A few words in the chapter intros. The path words use the same colors as the layers. */
 .term {
   font-weight: 600;

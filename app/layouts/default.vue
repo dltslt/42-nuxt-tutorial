@@ -42,16 +42,16 @@ watch(enabled, (on) => {
       :class="enabled ? 'max-w-[96rem] md:grid-cols-[11rem_1fr] lg:grid-cols-[11rem_1fr_minmax(24rem,32rem)]' : 'max-w-6xl md:grid-cols-[11rem_1fr]'"
     >
       <nav class="chapter-nav" aria-label="Chapters">
-        <p class="text-xs font-medium uppercase tracking-wide text-muted">Chapters</p>
+        <p class="text-base font-bold uppercase tracking-wide">Chapters</p>
         <ul class="mt-3 space-y-2">
           <li v-for="chapter in chapters" :key="chapter.to">
             <NuxtLink
               :to="chapter.to"
               class="text-sm"
-              :class="route.path === chapter.to ? 'font-medium text-highlighted' : 'text-muted'"
               :aria-current="route.path === chapter.to ? 'page' : undefined"
             >
-              {{ chapter.title }}
+              <span>{{ chapter.title }}</span>
+              <span class="chapter-nav-sizer" aria-hidden="true">{{ chapter.title }}</span>
             </NuxtLink>
           </li>
         </ul>
