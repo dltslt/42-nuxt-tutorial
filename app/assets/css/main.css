@@ -483,6 +483,121 @@ html.dark .shiki span {
   to { outline-color: transparent; }
 }
 
+.table-pick {
+  width: fit-content;
+  grid-auto-flow: column;
+  align-items: center;
+}
+
+.table-wrap {
+  overflow: auto;
+  max-inline-size: 100%;
+  max-block-size: min(24rem, 70vh);
+  container-type: inline-size;
+  border-radius: 0.75rem;
+  background: var(--ui-bg-elevated);
+}
+
+.rows {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.875rem;
+}
+
+.rows caption {
+  caption-side: top;
+  padding: 0.5rem 0.75rem;
+  text-align: start;
+  font-weight: 600;
+}
+
+.rows thead {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+}
+
+.rows th,
+.rows td {
+  padding: 0.35rem 0.75rem;
+  text-align: start;
+  white-space: nowrap;
+  background: var(--ui-bg-elevated);
+  border-block-end: 1px solid var(--ui-border);
+}
+
+.rows thead th {
+  background: var(--ui-bg-muted);
+}
+
+.rows tbody th {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+}
+
+.api-body {
+  overflow: auto;
+  max-block-size: min(20rem, 60vh);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  background: var(--ui-bg-elevated);
+}
+
+.api-status {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.api-body pre {
+  margin: 0;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  white-space: pre;
+}
+
+@container (width < 40rem) {
+  .rows,
+  .rows thead,
+  .rows tbody,
+  .rows tr,
+  .rows th,
+  .rows td {
+    display: block;
+  }
+
+  /* Labels move onto each cell, so the header row must leave the accessibility tree. */
+  .rows thead {
+    display: none;
+  }
+
+  .rows tr {
+    margin: 0.75rem;
+    border: 1px solid var(--ui-border);
+    border-radius: 0.5rem;
+  }
+
+  .rows tbody th {
+    position: sticky;
+    inset-block-start: 0;
+    inset-inline-start: auto;
+    z-index: 2;
+    background: var(--ui-bg-muted);
+  }
+
+  .rows td::before {
+    content: var(--label) ": ";
+    font-weight: 600;
+  }
+
+  .rows td {
+    white-space: normal;
+  }
+}
+
 @media (min-width: 48rem) {
   .socket {
     grid-template-columns: 1fr minmax(9rem, 14rem) 1fr;
@@ -523,7 +638,11 @@ html.dark .shiki span {
   .socket-packet,
   .anatomy-kind,
   .token,
-  .probe {
+  .probe,
+  .table-wrap,
+  .api-body,
+  .rows th,
+  .rows td {
     border: 1px solid CanvasText;
   }
 }

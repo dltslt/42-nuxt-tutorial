@@ -112,6 +112,13 @@ export const tree: AnatomyNode[] = [
             kind: 'url',
             becomes: '`/reactivity`',
             text: 'The reactivity chapter. The page holds a `ref` for the title and the count, and a `computed` for the double.'
+          },
+          {
+            id: 'page-routes',
+            name: 'routes.vue',
+            kind: 'url',
+            becomes: '`/routes`',
+            text: 'The routes chapter. It calls `GET /api/board` and `GET /api/tables`, and it lists the rows in `.data/tutorial.sqlite`.'
           }
         ]
       },
@@ -165,6 +172,13 @@ export const tree: AnatomyNode[] = [
         name: 'api',
         open: true,
         children: [
+          {
+            id: 'tables-get',
+            name: 'tables.get.ts',
+            kind: 'endpoint',
+            becomes: '`GET /api/tables`',
+            text: 'The routes chapter calls this with `?table=`. The handler allows `actors`, `columns`, `tasks`, and `blockers`, and returns those rows.'
+          },
           {
             id: 'board-get',
             name: 'board.get.ts',
