@@ -9,7 +9,8 @@ const chapters = [
   { to: '/sample', title: 'Sample content' },
   { to: '/rendering', title: 'Rendering' },
   { to: '/reactivity', title: 'Vue reactivity' },
-  { to: '/routes', title: 'Server routes and database' }
+  { to: '/routes', title: 'Server routes and database' },
+  { to: '/languages', title: 'Languages' }
 ]
 
 watch(enabled, (on) => {
@@ -50,7 +51,7 @@ watch(enabled, (on) => {
             </NuxtLink>
           </li>
         </ul>
-        <p class="mt-3 text-xs leading-relaxed text-muted">Languages follow the routes.</p>
+        <p class="mt-3 text-xs leading-relaxed text-muted">Modules, login, and tests follow.</p>
       </nav>
       <main class="min-w-0">
         <slot />

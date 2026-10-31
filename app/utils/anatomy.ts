@@ -119,6 +119,13 @@ export const tree: AnatomyNode[] = [
             kind: 'url',
             becomes: '`/routes`',
             text: 'The routes chapter. It calls `GET /api/board` and `GET /api/tables`, and it lists the rows in `.data/tutorial.sqlite`.'
+          },
+          {
+            id: 'page-languages',
+            name: 'languages.vue',
+            kind: 'url',
+            becomes: '`/languages`',
+            text: 'The languages chapter. It places TypeScript, the Vue file, CSS, and SQL in this app, and explains WebAssembly without shipping a `.wasm` file.'
           }
         ]
       },

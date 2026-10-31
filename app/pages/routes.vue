@@ -6,5 +6,9 @@
     </p>
     <ChaptersApiExplorer />
     <ChaptersTableViewer />
+    <p class="mt-8 text-sm text-pretty text-muted">
+      Continue with
+      <NuxtLink to="/languages" class="font-medium text-highlighted underline decoration-1 underline-offset-2">Languages</NuxtLink>.
+    </p>
   </div>
 </template>
