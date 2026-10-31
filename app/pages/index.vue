@@ -28,6 +28,7 @@ const { data, error } = await useFetch('/api/board', {
     <template v-else-if="data">
       <BoardTaskBoard class="mt-6" :board="data" />
       <XrayReplay />
+      <XrayJourney />
     </template>
   </div>
 </template>
