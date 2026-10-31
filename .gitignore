@@ -1,2 +1,25 @@
 # Local stamp written by the test-utils installer.
 .nuxtrc
+
+# Dependencies
+node_modules/
+
+# Nuxt / Nitro build outputs
+.nuxt/
+.output/
+dist/
+
+# Local database & state
+.data/
+
+# Environment & local secrets
+.env
+.env.*
+!.env.example
+
+# OS & IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
