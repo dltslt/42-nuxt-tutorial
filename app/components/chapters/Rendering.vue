@@ -127,21 +127,18 @@ function go(next: number) {
     <p class="mt-1 max-w-xl text-sm leading-relaxed text-pretty text-muted">
       <InlineText text="A path is the URL of one page. `app/pages/rendering.vue` is `/rendering`. The file name already chose that URL. `routeRules` in `nuxt.config.ts` chooses how the HTML for that URL is made. Pick one." />
     </p>
-    <div class="mt-4 grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr))" role="radiogroup" aria-labelledby="render-rules-title">
+    <div class="mt-4 grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr))" role="radiogroup" aria-labelledby="render-rules-title">
       <label v-for="item in rules" :key="item.id" class="pair-card">
         <input v-model="rule" type="radio" name="route-rule" :value="item.id">
         <span class="pair-names">
           <span>{{ item.name }}</span>
         </span>
+        <p><InlineText :text="item.text" /></p>
       </label>
     </div>
     <p class="sr-only" aria-live="polite">{{ chosen.name }}. {{ chosen.text.replaceAll('`', '') }}</p>
-    <article class="mt-4">
-      <h3 id="rule-sample" class="text-sm font-semibold text-highlighted">{{ chosen.name }}</h3>
-      <p class="mt-1 max-w-xl text-sm leading-relaxed text-pretty text-muted"><InlineText :text="chosen.text" /></p>
-      <div class="sample mt-2" tabindex="0" role="region" aria-labelledby="rule-sample">
-        <pre><code>{{ chosen.sample }}</code></pre>
-      </div>
-    </article>
+    <div class="sample mt-4" tabindex="0" role="region" aria-label="The routeRules entry for the selected tile">
+      <pre><code>{{ chosen.sample }}</code></pre>
+    </div>
   </section>
 </template>
