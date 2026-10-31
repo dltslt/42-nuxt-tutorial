@@ -559,6 +559,22 @@ html.dark .shiki span {
   white-space: pre;
 }
 
+.sample {
+  overflow: auto;
+  max-inline-size: 100%;
+  border-radius: 0.75rem;
+  background: var(--ui-bg-elevated);
+}
+
+.sample pre {
+  margin: 0;
+  padding: 0.75rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  white-space: pre;
+}
+
 @container (width < 40rem) {
   .rows,
   .rows thead,
@@ -641,6 +657,7 @@ html.dark .shiki span {
   .probe,
   .table-wrap,
   .api-body,
+  .sample,
   .rows th,
   .rows td {
     border: 1px solid CanvasText;
