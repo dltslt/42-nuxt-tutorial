@@ -137,8 +137,11 @@ function go(next: number) {
       </label>
     </div>
     <p class="sr-only" aria-live="polite">{{ chosen.name }}. {{ chosen.text.replaceAll('`', '') }}</p>
-    <div class="sample mt-4" tabindex="0" role="region" aria-label="The routeRules entry for the selected tile">
-      <pre><code>{{ chosen.sample }}</code></pre>
-    </div>
+    <article class="mt-4">
+      <h3 id="rule-sample" class="text-sm font-semibold text-highlighted">{{ chosen.name }}</h3>
+      <div class="sample mt-2" tabindex="0" role="region" aria-labelledby="rule-sample">
+        <pre><code>{{ chosen.sample }}</code></pre>
+      </div>
+    </article>
   </section>
 </template>
