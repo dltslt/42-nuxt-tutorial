@@ -8,7 +8,7 @@ const steps = [
     title: 'Two programs',
     active: 'both',
     browser: 'The browser is one process. Its memory holds the page you are looking at.',
-    server: 'Node is another process. Its memory holds the Nuxt server started by make dev.',
+    server: 'Node is another process. Its memory holds the Nuxt server started by `make dev`.',
     wire: 'A socket is the connection between those processes. Nothing has been written on it yet.',
     packet: '',
     at: '50%'
@@ -16,8 +16,8 @@ const steps = [
   {
     title: 'The port is open',
     active: 'server',
-    browser: 'The address bar says localhost:3042. That host and port name the other process.',
-    server: 'make dev started Node, and Nitro is listening on port 3042. A C server would be inside listen() and accept() here.',
+    browser: 'The address bar says `localhost:3042`. That host and port name the other process.',
+    server: '`make dev` started Node, and Nitro is listening on port 3042. A C server would be inside `listen()` and `accept()` here.',
     wire: 'The connection is open. Later requests reuse this socket.',
     packet: 'connected',
     at: '50%'
@@ -25,7 +25,7 @@ const steps = [
   {
     title: 'The browser writes',
     active: 'browser',
-    browser: 'The browser writes an HTTP request, the same role as write() on a connected socket.',
+    browser: 'The browser writes an HTTP request, the same role as `write()` on a connected socket.',
     server: 'The handler has not run. The bytes are still in the kernel, on their way to Node.',
     wire: 'Request bytes move toward the server.',
     packet: 'GET /api/board',
@@ -34,8 +34,8 @@ const steps = [
   {
     title: 'The server answers',
     active: 'server',
-    browser: 'The browser is reading. In C this is the read() that waits for the reply.',
-    server: 'server/api/board.get.ts runs, reads SQLite, and writes a JSON body back on the socket.',
+    browser: 'The browser is reading. In C this is the `read()` that waits for the reply.',
+    server: '`server/api/board.get.ts` runs, reads SQLite, and writes a JSON body back on the socket.',
     wire: 'Response bytes move back toward the browser.',
     packet: '200 JSON',
     at: '28%'
@@ -92,7 +92,7 @@ function go(next: number) {
         :style="{ borderLeftColor: 'var(--layer-browser)', background: 'var(--layer-browser-bg)' }"
       >
         <h3 class="text-sm font-semibold">Browser</h3>
-        <p class="mt-2 text-sm leading-relaxed text-pretty">{{ current.browser }}</p>
+        <p class="mt-2 text-sm leading-relaxed text-pretty"><InlineText :text="current.browser" /></p>
       </article>
 
       <div class="socket-wire" :style="{ '--at': current.at }">
@@ -105,7 +105,7 @@ function go(next: number) {
         :style="{ borderLeftColor: 'var(--layer-server)', background: 'var(--layer-server-bg)' }"
       >
         <h3 class="text-sm font-semibold">Node, running Nuxt</h3>
-        <p class="mt-2 text-sm leading-relaxed text-pretty">{{ current.server }}</p>
+        <p class="mt-2 text-sm leading-relaxed text-pretty"><InlineText :text="current.server" /></p>
       </article>
     </div>
     <p class="sr-only" aria-live="polite">{{ current.title }}. {{ current.wire }}</p>

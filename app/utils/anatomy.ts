@@ -23,22 +23,22 @@ export const tree: AnatomyNode[] = [
     id: 'makefile',
     name: 'Makefile',
     kind: 'source',
-    becomes: 'the dev server, and .output/ after make build',
-    text: 'make dev starts Nuxt on port 3042. make build writes the generated app into .output/. The file itself stays in the repository.'
+    becomes: 'the dev server, and `.output/` after `make build`',
+    text: '`make dev` starts Nuxt on port 3042. `make build` writes the generated app into `.output/`. The file itself stays in the repository.'
   },
   {
     id: 'package',
     name: 'package.json',
     kind: 'source',
-    becomes: 'node_modules and the scripts that start Nuxt',
-    text: 'pnpm install reads dependencies and fetches those packages. scripts.dev is nuxt dev. Nuxt is one of those packages.'
+    becomes: '`node_modules/` and the scripts that start Nuxt',
+    text: '`pnpm install` reads `dependencies` and fetches those packages. `scripts.dev` is `nuxt dev`. Nuxt is one of those packages.'
   },
   {
     id: 'config',
     name: 'nuxt.config.ts',
     kind: 'source',
-    becomes: 'the modules, the CSS, and the database path inside .nuxt/',
-    text: 'Nuxt reads this file when the process starts. It loads @nuxt/ui and modules/xray, pulls in app/assets/css/main.css, and points Nitro at .data/tutorial.sqlite.'
+    becomes: 'the modules, the CSS, and the database path inside `.nuxt/`',
+    text: 'Nuxt reads this file when the process starts. It loads `@nuxt/ui` and `modules/xray/`, pulls in `app/assets/css/main.css`, and points Nitro at `.data/tutorial.sqlite`.'
   },
   {
     id: 'app',
@@ -75,30 +75,30 @@ export const tree: AnatomyNode[] = [
             id: 'page-index',
             name: 'index.vue',
             kind: 'url',
-            becomes: '/',
-            text: 'A file in pages/ becomes a URL. index.vue is the path /, the welcome page.'
+            becomes: '`/`',
+            text: 'A file in `pages/` becomes a URL. `index.vue` is the path `/`, the welcome page.'
           },
           {
             id: 'page-from-c',
             name: 'from-c.vue',
             kind: 'url',
-            becomes: '/from-c',
-            text: 'The file name becomes the path. from-c.vue is the chapter about processes and the socket.'
+            becomes: '`/from-c`',
+            text: 'The file name becomes the path. `from-c.vue` is the chapter about processes and the socket.'
           },
           {
             id: 'page-anatomy',
             name: 'anatomy.vue',
             kind: 'url',
-            becomes: '/anatomy',
-            text: 'This page. The file name is the path, so the chapter is available at /anatomy.'
+            becomes: '`/anatomy`',
+            text: 'This page. The file name is the path, so the chapter is available at `/anatomy`.'
           },
           {
             id: 'page-sample',
             name: 'sample.vue',
             kind: 'url',
-            becomes: '/sample',
+            becomes: '`/sample`',
             open: true,
-            text: 'The board lives at /sample. The page calls useFetch on /api/board while Nuxt is building the HTML.'
+            text: 'The board lives at `/sample`. The page calls `useFetch` on `/api/board` while Nuxt is building the HTML.'
           }
         ]
       },
@@ -115,7 +115,7 @@ export const tree: AnatomyNode[] = [
                 name: 'TaskCard.vue',
                 kind: 'component',
                 becomes: 'a component inside the board',
-                text: 'sample.vue places one of these on the board for each task. The template name is BoardTaskCard, from the folder plus the file name.'
+                text: '`sample.vue` places one of these on the board for each task. The template name is `BoardTaskCard`, from the folder plus the file name.'
               }
             ]
           }
@@ -134,7 +134,7 @@ export const tree: AnatomyNode[] = [
                 name: 'main.css',
                 kind: 'component',
                 becomes: 'styles on the components',
-                text: 'nuxt.config.ts points css at this file. The layer colors and the board columns are defined here, and the components pick them up by class.'
+                text: '`nuxt.config.ts` points `css` at this file. The layer colors and the board columns are defined here, and the components pick them up by class.'
               }
             ]
           }
@@ -156,14 +156,14 @@ export const tree: AnatomyNode[] = [
             id: 'board-get',
             name: 'board.get.ts',
             kind: 'endpoint',
-            becomes: 'GET /api/board',
-            text: 'A file under server/api/ becomes an endpoint. The name before the dot is the path. The verb is .get, so the browser reaches it with GET /api/board.'
+            becomes: '`GET /api/board`',
+            text: 'A file under `server/api/` becomes an endpoint. The name before the dot is the path. The verb is `.get`, so the browser reaches it with `GET /api/board`.'
           },
           {
             id: 'tasks-post',
             name: 'tasks.post.ts',
             kind: 'endpoint',
-            becomes: 'POST /api/tasks',
+            becomes: '`POST /api/tasks`',
             text: 'The sample form sends the new task here. The handler inserts a row and returns that task as JSON.'
           },
           {
@@ -174,8 +174,8 @@ export const tree: AnatomyNode[] = [
                 id: 'task-patch',
                 name: '[id].patch.ts',
                 kind: 'endpoint',
-                becomes: 'PATCH /api/tasks/:id',
-                text: 'Brackets in a file name are a parameter. [id] is the task id in the path. Moving a card sends PATCH /api/tasks/ and that id.'
+                becomes: '`PATCH /api/tasks/:id`',
+                text: 'Brackets in a file name are a parameter. `[id]` is the task id in the path. Moving a card sends `PATCH /api/tasks/` and that id.'
               }
             ]
           }
@@ -220,20 +220,20 @@ export const tree: AnatomyNode[] = [
     name: '.nuxt/',
     kind: 'generated',
     becomes: 'types and the development build',
-    text: 'Nuxt writes this directory while make dev is running. It holds generated types and the current build. It is not committed.'
+    text: 'Nuxt writes this directory while `make dev` is running. It holds generated types and the current build. It is not committed.'
   },
   {
     id: 'output',
     name: '.output/',
     kind: 'generated',
     becomes: 'the production server',
-    text: 'make build writes this directory. It contains the server Node will run, plus the client files the browser downloads. It is not committed.'
+    text: '`make build` writes this directory. It contains the server Node will run, plus the client files the browser downloads. It is not committed.'
   },
   {
     id: 'sqlite',
     name: '.data/tutorial.sqlite',
     kind: 'source',
     becomes: 'the database the endpoints read',
-    text: 'The first make dev creates this file. server/plugins/seed.ts fills it, and the handlers under server/api/ query it. Git ignores it.'
+    text: 'The first `make dev` creates this file. `server/plugins/seed.ts` fills it, and the handlers under `server/api/` query it. Git ignores it.'
   }
 ]

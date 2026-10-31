@@ -64,7 +64,7 @@ function entries(record: Record<string, unknown> | null | undefined) {
             {{ index + 1 }}. {{ layer.name }}
           </p>
           <h3 class="mt-1 text-sm font-semibold">{{ layer.title }}</h3>
-          <p class="mt-1 text-sm leading-relaxed">{{ layer.sentence }}</p>
+          <p class="mt-1 text-sm leading-relaxed"><InlineText :text="layer.sentence" /></p>
 
           <p v-if="layer.quote" class="mt-3 text-lg font-medium">“{{ layer.quote }}”</p>
 

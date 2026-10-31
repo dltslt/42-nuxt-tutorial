@@ -4,22 +4,22 @@ const pairs = [
     id: 'make',
     c: 'Makefile',
     web: 'package.json',
-    cText: 'A target is a name and a recipe. In this tutorial, make dev runs pnpm exec nuxt dev --port 3042.',
-    webText: 'package.json stores those recipes under scripts, and the libraries under dependencies. nuxt.config.ts then names the modules Nuxt should load.'
+    cText: 'A target is a name and a recipe. In this tutorial, `make dev` runs `pnpm exec nuxt dev --port 3042`.',
+    webText: '`package.json` stores those recipes under `scripts`, and the libraries under `dependencies`. `nuxt.config.ts` then names the modules Nuxt should load.'
   },
   {
     id: 'main',
     c: 'main',
     web: 'the server start',
-    cText: 'A C program begins at main. After that, your code decides when to call listen.',
-    webText: 'nuxt dev starts Node. Nuxt reads nuxt.config.ts, Nitro listens on port 3042, and server/plugins/seed.ts runs once before the first request. app/app.vue is the root of the page inside that process.'
+    cText: 'A C program begins at `main`. After that, your code decides when to call `listen`.',
+    webText: '`nuxt dev` starts Node. Nuxt reads `nuxt.config.ts`, Nitro listens on port 3042, and `server/plugins/seed.ts` runs once before the first request. `app/app.vue` is the root of the page inside that process.'
   },
   {
     id: 'header',
     c: '#include',
     web: 'import',
-    cText: '#include inserts a header into the file the compiler is reading. The linker matches those declarations to object files afterwards.',
-    webText: 'import names a module. Vite finds that file while it builds the page. The modules array in nuxt.config.ts lists @nuxt/ui and modules/xray, which run as part of that build.'
+    cText: '`#include` inserts a header into the file the compiler is reading. The linker matches those declarations to object files afterwards.',
+    webText: '`import` names a module. Vite finds that file while it builds the page. The `modules` array in `nuxt.config.ts` lists `@nuxt/ui` and `modules/xray/`, which run as part of that build.'
   }
 ]
 
@@ -40,8 +40,8 @@ const selected = ref(pairs[0]!.id)
           <span>becomes</span>
           <span>{{ pair.web }}</span>
         </span>
-        <p>{{ pair.cText }}</p>
-        <p>{{ pair.webText }}</p>
+        <p><InlineText :text="pair.cText" /></p>
+        <p><InlineText :text="pair.webText" /></p>
       </label>
     </div>
   </section>

@@ -48,7 +48,7 @@ watch(steps, async (list) => {
       >
         <p class="text-xs font-semibold uppercase tracking-wide">{{ index + 1 }}. {{ step.kind }}</p>
         <h3 class="mt-1 font-mono text-sm font-semibold">{{ step.title }}</h3>
-        <p class="mt-1 text-sm leading-relaxed">{{ step.sentence }}</p>
+        <p class="mt-1 text-sm leading-relaxed"><InlineText :text="step.sentence" /></p>
 
         <dl v-if="step.props" class="mt-3 grid grid-cols-[6rem_1fr] gap-x-2 gap-y-1 text-sm">
           <template v-for="(value, name) in step.props" :key="name">
