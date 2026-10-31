@@ -125,7 +125,7 @@ function go(next: number) {
   <section class="mt-10" aria-labelledby="render-rules-title">
     <h2 id="render-rules-title" class="text-lg font-semibold tracking-tight text-highlighted"><code class="token">routeRules</code></h2>
     <p class="mt-1 max-w-xl text-sm leading-relaxed text-pretty text-muted">
-      <InlineText text="A path is the URL of one page. `app/pages/rendering.vue` is `/rendering`. The file name already chose that URL. `routeRules` in `nuxt.config.ts` chooses how the HTML for that URL is made. Pick one." />
+      <InlineText text="A path is the URL of one page. `app/pages/rendering.vue` is `/rendering`. The file name already chose that URL. `routeRules` in `nuxt.config.ts` chooses how the HTML for that URL is made." />
     </p>
     <div class="mt-4 grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr))" role="radiogroup" aria-labelledby="render-rules-title">
       <label v-for="item in rules" :key="item.id" class="pair-card">
