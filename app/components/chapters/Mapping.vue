@@ -22,27 +22,24 @@ const pairs = [
     webText: '`import` names a module. Vite finds that file while it builds the page. The `modules` array in `nuxt.config.ts` lists `@nuxt/ui` and `modules/xray/`, which run as part of that build.'
   }
 ]
-
-const selected = ref(pairs[0]!.id)
 </script>
 
 <template>
   <section class="mt-10" aria-labelledby="mapping-title">
     <h2 id="mapping-title" class="text-lg font-semibold tracking-tight text-highlighted">The same jobs, in other files</h2>
     <p class="mt-1 max-w-xl text-sm leading-relaxed text-pretty text-muted">
-      Pick a piece of the C toolchain. The card names the file that does that job in this app.
+      Each card is one job from C, and the file that does it in this app.
     </p>
     <div class="mt-4 grid gap-3" style="grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr))">
-      <label v-for="pair in pairs" :key="pair.id" class="pair-card">
-        <input v-model="selected" type="radio" name="toolchain" :value="pair.id">
-        <span class="pair-names">
+      <article v-for="pair in pairs" :key="pair.id" class="pair-card">
+        <h3 class="pair-names">
           <span>{{ pair.c }}</span>
           <span>becomes</span>
           <span>{{ pair.web }}</span>
-        </span>
+        </h3>
         <p><InlineText :text="pair.cText" /></p>
         <p><InlineText :text="pair.webText" /></p>
-      </label>
+      </article>
     </div>
   </section>
 </template>
