@@ -15,6 +15,10 @@ Every piece of text on the screen comes from somewhere. Here, the path is always
 
 The app shows that path for real data. Open the Sample board, then turn on **X-ray** in the header and point at a title. The panel names the file that drew it, the request that carried it, and the row it came from.
 
+<p align="center">
+  <img src="docs/assets/banner.png" alt="Banner"/>
+</p>
+
 The chapters in the app walk through the same path from different angles: the rendering, the reactivity, the routes, the database, and the tooling around them.
 
 ## Prerequisites
