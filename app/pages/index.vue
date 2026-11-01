@@ -2,7 +2,10 @@
   <div>
     <h1 class="text-2xl font-semibold tracking-tight text-pretty text-highlighted">Welcome</h1>
     <p class="mt-2 max-w-xl text-sm leading-relaxed text-pretty text-muted">
-      This is a small working <strong class="term">Nuxt</strong> app, built to be read. Every page you see is a piece of it, and every chapter explains one part of how it is put together. The app is a task board: a list of tasks in columns, with a few things you can do to them. You do not need to know Nuxt or Vue first. You do need to know C or C++.
+      This is a self-contained, interactive breakdown of how a modern full-stack web framework (here <strong class="term">Nuxt</strong>) actually works. It is written specifically for 42 students stepping out of C and C++ into web architecture for <code class="token">ft_transcendence</code>.
+    </p>
+    <p class="mt-2 max-w-xl text-sm leading-relaxed text-pretty text-muted">
+      Instead of abstract slides or disconnected snippets, this entire site <em>is</em> the application you are studying. No prior knowledge of Vue, TypeScript, or frontend tooling is required.
     </p>
 
     <section
@@ -12,21 +15,33 @@
       <p class="text-xs font-semibold uppercase tracking-wide text-primary">Start here</p>
       <h2 id="xray-title" class="mt-1 text-lg font-semibold tracking-tight text-highlighted">Turn on X-ray</h2>
       <p class="mt-2 text-sm leading-relaxed text-pretty text-muted">
-        <strong class="term">X-ray</strong> is the feature this tutorial is built around. It is the only place where the path behind a word on the screen is shown. Chapters explain the parts; X-ray shows how they connect in the running app.
+        Web frameworks hide a lot of machinery behind convenience. <strong class="term">X-ray</strong> pulls back that curtain by mapping any rendered element on your screen directly to the underlying engineering chain:
       </p>
       <ol class="mt-3 list-decimal space-y-2 ps-5 text-sm leading-relaxed text-pretty text-muted">
-        <li>Switch <strong class="text-highlighted">X-ray</strong> on in the header, at the top right.</li>
-        <li>Hover over any word or box on the page. The panel on the right shows the file and the element behind it.</li>
-        <li>Click it to keep it selected. Then follow the path: the <strong class="term-vue">page</strong>, the <strong class="term-network">request</strong>, the <strong class="term-server">server</strong>, and the <strong class="term-database">row</strong>.</li>
+        <li>Toggle <strong class="text-highlighted">X-ray</strong> on in the header (top-right).</li>
+        <li>Hover over any component to reveal the source file and template line that rendered it.</li>
+        <li>Click to lock selection and trace the full execution path: from the <strong class="term-vue">Vue component</strong> &rarr; across the <strong class="term-network">HTTP request</strong> &rarr; into the <strong class="term-server">server endpoint</strong> &rarr; down to the exact <strong class="term-database">SQLite row</strong>.</li>
       </ol>
       <p class="mt-3 text-sm leading-relaxed text-pretty text-muted">
-        Leave X-ray on while you read. The chapters refer to the same path, and X-ray is how you check each one against the running app.
+        Toogle X-ray on/off as you navigate the chapters—each topic directly references this live pipeline.
       </p>
     </section>
 
-    <h2 class="mt-10 text-lg font-semibold tracking-tight text-highlighted">What the app is</h2>
+    <h2 class="mt-10 text-lg font-semibold tracking-tight text-highlighted">The Reference Architecture</h2>
     <p class="mt-2 max-w-xl text-sm leading-relaxed text-pretty text-muted">
-      The board on <NuxtLink to="/sample" class="font-medium text-highlighted underline decoration-1 underline-offset-2">Sample content</NuxtLink> is the running example. Its tasks are stored in a <strong class="term-database">SQLite</strong> file on the server. When you add or move a task, the browser sends a <strong class="term-network">request</strong>, the <strong class="term-server">server</strong> writes the change, and the page shows the result. The same app serves the first HTML page and every later click.
+      To keep concepts concrete, the tutorial runs an embedded Kanban board on the 
+      <NuxtLink to="/sample" class="font-medium text-highlighted underline decoration-1 underline-offset-2">Sample board</NuxtLink> page. 
+    </p>
+    <p class="mt-2 max-w-xl text-sm leading-relaxed text-pretty text-muted">
+      The board exercises every tier of a typical web system:
+    </p>
+    <ul class="mt-3 max-w-xl list-disc space-y-1.5 ps-5 text-sm leading-relaxed text-pretty text-muted">
+      <li><strong>Persistence:</strong> Native SQLite stored locally on disk (<code class="token">.data/tutorial.sqlite</code>).</li>
+      <li><strong>Server engine:</strong> Nitro / Node.js handling API routing, session cookies, and database transactions.</li>
+      <li><strong>Client runtime:</strong> Vue managing DOM updates and client-side reactivity without full page reloads.</li>
+    </ul>
+    <p class="mt-3 max-w-xl text-sm leading-relaxed text-pretty text-muted">
+      The same unified codebase handles the initial server-side HTML rendering (SSR) and every subsequent client-side JSON interaction.
     </p>
 
     <h2 class="mt-10 text-lg font-semibold tracking-tight text-highlighted">How the chapters go</h2>
